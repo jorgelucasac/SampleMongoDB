@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Estudos.MongoDb.Api.Controllers
+namespace Estudos.MongoDb.Api.Controllers.V1
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController : MainController
     {
         private static readonly string[] Summaries = new[]
         {
