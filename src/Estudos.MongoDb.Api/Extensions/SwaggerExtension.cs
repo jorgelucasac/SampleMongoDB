@@ -16,6 +16,7 @@ public static class SwaggerExtension
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             }
+
             c.OperationFilter<SwaggerDefaultValues>();
         });
     }
