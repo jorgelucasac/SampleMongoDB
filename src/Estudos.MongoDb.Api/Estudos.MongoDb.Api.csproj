@@ -22,4 +22,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Estudos.MongoDb.Application\Estudos.MongoDb.Application.csproj" />
+  </ItemGroup>
+
 </Project>

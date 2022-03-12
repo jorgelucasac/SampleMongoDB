@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+﻿using Estudos.MongoDb.Application.Extensions;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Estudos.MongoDb.Api.Extensions;
 
@@ -10,6 +11,7 @@ public static class Startup
         services.AddEndpointsApiExplorer();
         services.AddVersionamento();
         services.AddSwaggerConfiguration();
+        services.AddApplicationServices();
 
         return services;
     }
