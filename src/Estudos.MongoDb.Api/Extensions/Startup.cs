@@ -14,7 +14,7 @@ public static class Startup
         return services;
     }
 
-    public static IApplicationBuilder Configure(this WebApplication app)
+    public static WebApplication Configure(this WebApplication app)
     {
         var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
         app.UseSwaggerConfiguration(apiVersionDescriptionProvider);
