@@ -4,32 +4,33 @@ public class Output
 {
     public Output()
     {
-        Erros = new List<string>();
+        _erros = new List<string>();
     }
 
     public Output(object result)
     {
         Result = result;
-        Erros = new List<string>();
+        _erros = new List<string>();
     }
 
-    public Output(List<string> erros)
+    public Output(List<string> _erros)
     {
-        Erros = new List<string>();
-        AddErros(erros);
+        _erros = new List<string>();
+        AddErros(_erros);
     }
 
     public Output(string erro)
     {
-        Erros = new List<string>();
+        _erros = new List<string>();
         AddErro(erro);
     }
 
-    public object Result { get; private set; }
+    private readonly List<string> _erros;
 
-    public List<string> Erros { get; }
-    public bool IsValid => Erros.Any();
-    public bool IsInvalid => !IsValid;
+    public object Result { get; private set; }
+    public IReadOnlyCollection<string> Erros => _erros.AsReadOnly();
+    public bool IsValid => !IsInvalid;
+    public bool IsInvalid => _erros.Any();
 
     public void AddResult(object result)
     {
@@ -38,16 +39,16 @@ public class Output
 
     public void AddErro(string erro)
     {
-        Erros.Add(erro);
+        _erros.Add(erro);
     }
 
     public void AddErros(List<string> erros)
     {
-        Erros.AddRange(erros);
+        _erros.AddRange(erros);
     }
 
     public void ClearErros()
     {
-        Erros.Clear();
+        _erros.Clear();
     }
 }
