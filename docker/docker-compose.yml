@@ -1,0 +1,11 @@
+version: "3.6"
+
+services:
+   mongo-db:
+    image: 'mongo'
+    ports:
+        - '27017:27017'
+    container_name:  mongo-db
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: 'admin'
+        MONGO_INITDB_ROOT_PASSWORD: 'abc123!'
