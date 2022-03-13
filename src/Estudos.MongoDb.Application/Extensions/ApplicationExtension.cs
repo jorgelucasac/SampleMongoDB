@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Estudos.MongoDb.Application.Profiles;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,13 +12,14 @@ public static class ApplicationExtension
         services.AddMediatr();
         services.AddFailFastValidationBehavior();
         services.AddValidators();
+        services.AddAutoMapperToApplication();
 
         return services;
     }
 
     private static void AddMediatr(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(FailFastValidationBehavior<,>).Assembly);
+        services.AddMediatR(typeof(CreateRestauranteProfile).Assembly);
     }
 
     private static IServiceCollection AddFailFastValidationBehavior(this IServiceCollection services)
@@ -30,8 +32,15 @@ public static class ApplicationExtension
     private static IServiceCollection AddValidators(this IServiceCollection services)
     {
         AssemblyScanner
-            .FindValidatorsInAssembly(typeof(FailFastValidationBehavior<,>).Assembly)
+            .FindValidatorsInAssembly(typeof(CreateRestauranteProfile).Assembly)
             .ForEach(result => services.AddScoped(result.InterfaceType, result.ValidatorType));
+
+        return services;
+    }
+
+    private static IServiceCollection AddAutoMapperToApplication(this IServiceCollection services)
+    {
+        services.AddAutoMapper(typeof(CreateRestauranteProfile));
 
         return services;
     }
