@@ -10,7 +10,6 @@ public class GetAllRestaurantsInputValidation : AbstractValidator<GetAllRestaura
         ValidatePage();
         ValidateResults();
         ValidateOrderBy();
-        ValidateFilter();
         ValidateSortOrder();
     }
 
@@ -29,13 +28,8 @@ public class GetAllRestaurantsInputValidation : AbstractValidator<GetAllRestaura
     private void ValidateOrderBy()
     {
         RuleFor(p => p.OrderBy)
-            .Must(IsValidOrderByAndFilter);
-    }
-
-    private void ValidateFilter()
-    {
-        RuleFor(p => p.Filter)
-            .Must(IsValidOrderByAndFilter);
+            .Must(IsValidOrderByAndFilter)
+            .WithMessage("campo de ordenação inválido");
     }
 
     private void ValidateSortOrder()
@@ -50,7 +44,7 @@ public class GetAllRestaurantsInputValidation : AbstractValidator<GetAllRestaura
             return true;
 
         var properties = typeof(CreateRestaurantOutput).GetProperties();
-        return properties.Select(a => a.Name)
-            .Contains(property);
+        return properties.Select(a => a.Name.ToLower())
+            .Contains(property.ToLower());
     }
 }

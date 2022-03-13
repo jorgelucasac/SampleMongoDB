@@ -8,16 +8,20 @@ public abstract class PagedResultBase
 
     public int TotalPages { get; set; }
 
-    public long TotalResults { get; set; }
+    public long TotalItems { get; set; }
 
-    protected PagedResultBase() { }
+    public long Total { get; set; }
+
+    protected PagedResultBase()
+    { }
 
     protected PagedResultBase(int currentPage, int resultsPerPage,
-        int totalPages, long totalResults)
+        int totalPages, int totalItems, long total)
     {
         CurrentPage = currentPage > totalPages ? totalPages : currentPage;
         ResultsPerPage = resultsPerPage;
         TotalPages = totalPages;
-        TotalResults = totalResults;
+        Total = total;
+        TotalItems = totalItems;
     }
 }

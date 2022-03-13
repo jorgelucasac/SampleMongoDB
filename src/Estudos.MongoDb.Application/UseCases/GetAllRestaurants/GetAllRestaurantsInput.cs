@@ -14,7 +14,7 @@ public class GetAllRestaurantsInput : IRequest<Output>, IPagedQuery
         OrderBy = orderBy;
         Filter = filter;
         if (!string.IsNullOrEmpty(sortOrder))
-            SortOrder = Enum.Parse<SortOrder>(sortOrder);
+            SortOrder = Enum.Parse<SortOrder>(sortOrder, true);
     }
 
     public int Page { get; }

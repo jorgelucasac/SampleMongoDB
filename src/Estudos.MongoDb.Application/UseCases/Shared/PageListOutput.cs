@@ -5,17 +5,19 @@ public class PageListOutput<T>
     public int CurrentPage { get; }
     public int TotalPages { get; }
     public int PageSize { get; }
-    public int TotalCount { get; }
+    public int TotalItems { get; }
+    public int Total { get; }
     public bool HasPrevious => CurrentPage > 1;
     public bool HasNext => CurrentPage < TotalPages;
     public IEnumerable<T> Items { get; }
 
-    public PageListOutput(IEnumerable<T> items, int count, int pageNumber, int pageSize)
+    public PageListOutput(IEnumerable<T> items, int totalItems, int total, int pageNumber, int pageSize)
     {
-        TotalCount = count;
+        TotalItems = totalItems;
+        Total = total;
         PageSize = pageSize;
         CurrentPage = pageNumber;
-        TotalPages = CalculateTotalPages(count, pageSize);
+        TotalPages = CalculateTotalPages(total, pageSize);
         Items = items;
     }
 

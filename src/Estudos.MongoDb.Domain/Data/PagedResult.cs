@@ -12,24 +12,16 @@ public class PagedResult<T> : PagedResultBase
 
     protected PagedResult(IEnumerable<T> items,
         int currentPage, int resultsPerPage,
-        int totalPages, long totalResults) : base(currentPage, resultsPerPage, totalPages, totalResults)
+        int totalPages, int totalItems, long total) : base(currentPage, resultsPerPage, totalPages, totalItems, total)
     {
         Items = items;
     }
 
     public static PagedResult<T> Create(IEnumerable<T> items,
-        int currentPage, int resultsPerPage,
-        int totalPages, long totalResults)
+        int currentPage, int resultsPerPage, int totalPages,
+        int totalItems, long total)
     {
-        var pagedResult = new PagedResult<T>(items, currentPage, resultsPerPage, totalPages, totalResults);
-
-        return pagedResult;
-    }
-
-    public static PagedResult<T> From(PagedResultBase result, IEnumerable<T> items)
-    {
-        var pagedResult = new PagedResult<T>(items, result.CurrentPage, result.ResultsPerPage,
-            result.TotalPages, result.TotalResults);
+        var pagedResult = new PagedResult<T>(items, currentPage, resultsPerPage, totalPages, totalItems, total);
 
         return pagedResult;
     }

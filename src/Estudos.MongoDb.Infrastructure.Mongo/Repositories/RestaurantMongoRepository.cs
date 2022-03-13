@@ -4,7 +4,9 @@ using Estudos.MongoDb.Domain.Data.Interfaces;
 using Estudos.MongoDb.Domain.Entities;
 using Estudos.MongoDb.Infrastructure.Mongo.Interfaces;
 using Estudos.MongoDb.Infrastructure.Mongo.Schemas;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Text.RegularExpressions;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Repositories;
 
@@ -36,23 +38,27 @@ public class RestaurantMongoRepository : MongoRepositoryBase<RestaurantSchema>, 
         var pageFilter = PageQueryFilter.Of(query, (int)resultCount);
         var restaurants = new List<Restaurant>();
 
-        await Collection.Find(filter)
+        var filterQuery = Collection.Find(filter)
             .Sort(GetSort(query.SortOrder, query.OrderBy))
             .Skip(pageFilter.Skip)
-            .Limit(pageFilter.ResultCountPerPage)
-            .ForEachAsync(schema =>
-            {
-                restaurants.Add(_mapper.Map<Restaurant>(schema));
-            }, cancellationToken);
+            .Limit(pageFilter.ResultCountPerPage);
+
+        await filterQuery.ForEachAsync(schema =>
+         {
+             restaurants.Add(_mapper.Map<Restaurant>(schema));
+         }, cancellationToken);
 
         return PagedResult<Restaurant>.Create(restaurants, pageFilter.Page, pageFilter.ResultCountPerPage,
-            pageFilter.PageCount, pageFilter.ResultCount);
+            pageFilter.PageCount, restaurants.Count, pageFilter.ResultCount);
     }
 
     private FilterDefinition<RestaurantSchema> GetFilter(string filter)
     {
-        return string.IsNullOrEmpty(filter) ?
-            Builders<RestaurantSchema>.Filter.Empty :
-            Builders<RestaurantSchema>.Filter.ElemMatch(x => x.Name, filter);
+        var regexFilter = Regex.Escape(filter);
+        var bsonRegex = new BsonRegularExpression(regexFilter, "i");
+        return new BsonDocument { { nameof(Restaurant.Name), bsonRegex } };
+
+        //return new BsonDocument { { nameof(Restaurant.Name),
+        //    new BsonDocument { { "$regex", filter }, { "$options", "i" } } } };
     }
 }

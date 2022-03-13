@@ -2,6 +2,7 @@
 using Estudos.MongoDb.Infrastructure.Mongo.Interfaces;
 using MongoDB.Driver;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Repositories;
 
@@ -25,7 +26,7 @@ public abstract class MongoRepositoryBase<T> where T : class
         var @type = typeof(T);
 
         var parameter = Expression.Parameter(@type);
-        var property = Expression.Property(parameter, @type.GetProperty(propertyName));
+        var property = Expression.Property(parameter, @type.GetProperty(propertyName, BindingFlags.IgnoreCase |  BindingFlags.Public | BindingFlags.Instance));
         var conversion = Expression.Convert(property, typeof(object));
         var lambda = Expression.Lambda<Func<T, object>>(conversion, parameter);
 
