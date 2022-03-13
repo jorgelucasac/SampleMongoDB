@@ -2,7 +2,7 @@
 
 public class CreateRestauranteOutput
 {
-    public string Id { get; set; } = string.Empty;
+    public string Id { get; set; }
     public string Nome { get; set; } = string.Empty;
     public int Cozinha { get; set; }
     public string Logradouro { get; set; } = string.Empty;
