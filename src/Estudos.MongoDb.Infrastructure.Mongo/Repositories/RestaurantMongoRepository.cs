@@ -52,6 +52,22 @@ public class RestaurantMongoRepository : MongoRepositoryBase<RestaurantSchema>, 
             pageFilter.PageCount, restaurants.Count, pageFilter.ResultCount);
     }
 
+    public async Task<Restaurant> GetById(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var restaurantSchema = await Collection
+                .Find(a => a.Id == id)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            return _mapper.Map<Restaurant>(restaurantSchema);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
     private FilterDefinition<RestaurantSchema> GetFilter(string filter)
     {
         var regexFilter = Regex.Escape(filter);

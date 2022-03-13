@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
+using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 using Estudos.MongoDb.Domain.Entities;
 using Estudos.MongoDb.Domain.Enums;
 using Estudos.MongoDb.Domain.ValueObjects;
@@ -25,5 +26,12 @@ public class CreateRestaurantProfile : Profile
 
         CreateMap<Restaurant, GetAllRestaurantsOutput>()
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City));
+
+        CreateMap<Restaurant, GetRestaurantByIdOutput>()
+            .ForMember(dest => dest.PublicPlace, opt => opt.MapFrom(src => src.Address.PublicPlace))
+            .ForMember(dest => dest.Number, opt => opt.MapFrom(src => src.Address.Number))
+            .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
+            .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Address.State))
+            .ForMember(dest => dest.ZipCode, opt => opt.MapFrom(src => src.Address.ZipCode));
     }
 }

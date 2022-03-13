@@ -17,4 +17,8 @@
     <ProjectReference Include="..\Estudos.MongoDb.Domain\Estudos.MongoDb.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\GetRestaurantById\" />
+  </ItemGroup>
+
 </Project>

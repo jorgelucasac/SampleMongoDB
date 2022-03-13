@@ -3,6 +3,7 @@ using Estudos.MongoDb.Api.Extensions;
 using Estudos.MongoDb.Api.Transports.Requests;
 using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
+using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,17 @@ public class RestaurantsController : MainController
             return Ok(output.Result);
 
         return BadRequest(output.MapToApiErrorResponse());
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetAsync(string id, CancellationToken cancellationToken)
+    {
+        var output = await _mediator.Send(new GetRestaurantByIdInput(id), cancellationToken);
+
+        if (output.IsInvalid)
+            return BadRequest(output.MapToApiErrorResponse());
+
+        return output.Result is null ? NotFound() : Ok(output.Result);
     }
 
     [HttpPost]
