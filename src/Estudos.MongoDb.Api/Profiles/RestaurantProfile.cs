@@ -5,11 +5,11 @@ using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 
 namespace Estudos.MongoDb.Api.Profiles;
 
-public class RestauranteProfile : Profile
+public class RestaurantProfile : Profile
 {
-    public RestauranteProfile()
+    public RestaurantProfile()
     {
-        CreateMap<CreateRestauranteRequest, CreateRestauranteInput>();
+        CreateMap<CreateRestaurantRequest, CreateRestaurantInput>();
         CreateMap<GetAllRestaurantsRequest, GetAllRestaurantsInput>()
             .ConstructUsing(src =>
                 new GetAllRestaurantsInput(src.Page, src.PageSize, src.OrderBy, src.Name, src.SortOrder));

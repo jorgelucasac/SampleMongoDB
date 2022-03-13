@@ -27,8 +27,4 @@
     <ProjectReference Include="..\Estudos.MongoDb.Infrastructure.Mongo\Estudos.MongoDb.Infrastructure.Mongo.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Profiles\" />
-  </ItemGroup>
-
 </Project>

@@ -4,12 +4,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Schemas;
 
-public class RestauranteSchema
+public class RestaurantSchema
 {
     [BsonRepresentation(BsonType.ObjectId)]
     public string Id { get; set; }
 
-    public string Nome { get; set; }
+    public string Name { get; set; }
     public Country Country { get; set; }
-    public EnderecoSchema Endereco { get; set; }
+    public AddressSchema Address { get; set; }
 }

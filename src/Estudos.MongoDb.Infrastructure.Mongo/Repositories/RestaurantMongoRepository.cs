@@ -8,7 +8,7 @@ using MongoDB.Driver;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Repositories;
 
-public class RestaurantMongoRepository : MongoRepositoryBase<RestauranteSchema>, IRestaurantRepository
+public class RestaurantMongoRepository : MongoRepositoryBase<RestaurantSchema>, IRestaurantRepository
 {
     protected override string CollectionName => nameof(Restaurant);
     private readonly IMapper _mapper;
@@ -20,10 +20,10 @@ public class RestaurantMongoRepository : MongoRepositoryBase<RestauranteSchema>,
 
     public async Task<string> Create(Restaurant restaurant, CancellationToken cancellationToken)
     {
-        var restauranteSchema = _mapper.Map<RestauranteSchema>(restaurant);
-        await Collection.InsertOneAsync(restauranteSchema, new InsertOneOptions(), cancellationToken);
+        var restaurantSchema = _mapper.Map<RestaurantSchema>(restaurant);
+        await Collection.InsertOneAsync(restaurantSchema, new InsertOneOptions(), cancellationToken);
 
-        return restauranteSchema.Id;
+        return restaurantSchema.Id;
     }
 
     public async Task<PagedResult<Restaurant>> GetAll(IPagedQuery query, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ public class RestaurantMongoRepository : MongoRepositoryBase<RestauranteSchema>,
         var filter = GetFilter(query.Filter);
 
         var pageFilter = PageQueryFilter.Of(query, (int)resultCount);
-        var restaurantes = new List<Restaurant>();
+        var restaurants = new List<Restaurant>();
 
         await Collection.Find(filter)
             .Sort(GetSort(query.SortOrder, query.OrderBy))
@@ -42,17 +42,17 @@ public class RestaurantMongoRepository : MongoRepositoryBase<RestauranteSchema>,
             .Limit(pageFilter.ResultCountPerPage)
             .ForEachAsync(schema =>
             {
-                restaurantes.Add(_mapper.Map<Restaurant>(schema));
+                restaurants.Add(_mapper.Map<Restaurant>(schema));
             }, cancellationToken);
 
-        return PagedResult<Restaurant>.Create(restaurantes, pageFilter.Page, pageFilter.ResultCountPerPage,
+        return PagedResult<Restaurant>.Create(restaurants, pageFilter.Page, pageFilter.ResultCountPerPage,
             pageFilter.PageCount, pageFilter.ResultCount);
     }
 
-    private FilterDefinition<RestauranteSchema> GetFilter(string filter)
+    private FilterDefinition<RestaurantSchema> GetFilter(string filter)
     {
         return string.IsNullOrEmpty(filter) ?
-            Builders<RestauranteSchema>.Filter.Empty :
-            Builders<RestauranteSchema>.Filter.ElemMatch(x => x.Nome, filter);
+            Builders<RestaurantSchema>.Filter.Empty :
+            Builders<RestaurantSchema>.Filter.ElemMatch(x => x.Name, filter);
     }
 }

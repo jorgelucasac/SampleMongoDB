@@ -19,7 +19,7 @@ public static class ApplicationExtension
 
     private static void AddMediatr(this IServiceCollection services)
     {
-        services.AddMediatR(typeof(CreateRestauranteProfile).Assembly);
+        services.AddMediatR(typeof(CreateRestaurantProfile).Assembly);
     }
 
     private static IServiceCollection AddFailFastValidationBehavior(this IServiceCollection services)
@@ -32,7 +32,7 @@ public static class ApplicationExtension
     private static IServiceCollection AddValidators(this IServiceCollection services)
     {
         AssemblyScanner
-            .FindValidatorsInAssembly(typeof(CreateRestauranteProfile).Assembly)
+            .FindValidatorsInAssembly(typeof(CreateRestaurantProfile).Assembly)
             .ForEach(result => services.AddScoped(result.InterfaceType, result.ValidatorType));
 
         return services;
@@ -40,7 +40,7 @@ public static class ApplicationExtension
 
     private static IServiceCollection AddAutoMapperToApplication(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(CreateRestauranteProfile));
+        services.AddAutoMapper(typeof(CreateRestaurantProfile));
 
         return services;
     }

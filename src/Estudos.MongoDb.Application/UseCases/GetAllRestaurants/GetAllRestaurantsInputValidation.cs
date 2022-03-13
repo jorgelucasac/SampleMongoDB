@@ -49,7 +49,7 @@ public class GetAllRestaurantsInputValidation : AbstractValidator<GetAllRestaura
         if (string.IsNullOrEmpty(property))
             return true;
 
-        var properties = typeof(CreateRestauranteOutput).GetProperties();
+        var properties = typeof(CreateRestaurantOutput).GetProperties();
         return properties.Select(a => a.Name)
             .Contains(property);
     }

@@ -1,16 +1,30 @@
-﻿using Estudos.MongoDb.Domain.ValueObjects;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Estudos.MongoDb.Domain.Validations;
+namespace Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 
-internal class AddressValidation : AbstractValidator<Address>
+public class CreateRestaurantInputValidation : AbstractValidator<CreateRestaurantInput>
 {
-    public AddressValidation()
+    public CreateRestaurantInputValidation()
     {
         ValidatePublicPlace();
         ValidateCity();
         ValidateState();
         ValidateZipCode();
+        ValidateName();
+        ValidateCountry();
+    }
+
+    private void ValidateName()
+    {
+        RuleFor(c => c.Name)
+            .NotEmpty()
+            .MaximumLength(30);
+    }
+
+    private void ValidateCountry()
+    {
+        RuleFor(c => c.Country)
+            .NotEmpty();
     }
 
     private void ValidatePublicPlace()

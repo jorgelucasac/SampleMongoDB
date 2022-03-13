@@ -3,7 +3,7 @@
 public class GetAllRestaurantsOutput
 {
     public string Id { get; set; } = string.Empty;
-    public string Nome { get; set; } = string.Empty;
-    public string Cozinha { get; set; } = string.Empty;
-    public string Cidade { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Country { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
 }

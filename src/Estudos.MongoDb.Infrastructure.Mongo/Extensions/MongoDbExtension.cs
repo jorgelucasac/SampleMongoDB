@@ -34,11 +34,11 @@ public static class MongoDbExtension
 
     private static void AddAutoMapperToInfrastructure(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(RestauranteProfile));
+        services.AddAutoMapper(typeof(RestaurantProfile));
     }
 
     private static void AddSchemaMappings()
     {
-        RestauranteSchemaMapping.Configure();
+        RestaurantSchemaMapping.Configure();
     }
 }
