@@ -8,7 +8,7 @@ namespace Estudos.MongoDb.Domain.Validations
         public RestauranteValidation()
         {
             ValidarNome();
-            ValidarNome();
+            ValidarCozinha();
         }
 
         private void ValidarNome()
