@@ -1,4 +1,4 @@
-﻿namespace Estudos.MongoDb.Application.Shared;
+﻿namespace Estudos.MongoDb.Application.UseCases.Shared;
 
 public class Output
 {

@@ -1,5 +1,5 @@
 ﻿using Estudos.MongoDb.Api.Transports.Responses;
-using Estudos.MongoDb.Application.Shared;
+using Estudos.MongoDb.Application.UseCases.Shared;
 
 namespace Estudos.MongoDb.Api.Extensions
 {

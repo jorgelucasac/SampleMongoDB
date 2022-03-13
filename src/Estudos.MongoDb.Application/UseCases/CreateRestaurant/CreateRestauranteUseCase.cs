@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Estudos.MongoDb.Application.Shared;
+using Estudos.MongoDb.Application.UseCases.Shared;
+using Estudos.MongoDb.Domain.Data.Interfaces;
 using Estudos.MongoDb.Domain.Entities;
-using Estudos.MongoDb.Domain.Repositories;
 
 namespace Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 

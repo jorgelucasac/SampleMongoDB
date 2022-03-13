@@ -1,4 +1,4 @@
-﻿using Estudos.MongoDb.Application.Shared;
+﻿using Estudos.MongoDb.Application.UseCases.Shared;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;

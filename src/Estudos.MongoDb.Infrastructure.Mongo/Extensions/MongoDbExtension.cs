@@ -1,4 +1,4 @@
-﻿using Estudos.MongoDb.Domain.Repositories;
+﻿using Estudos.MongoDb.Domain.Data.Interfaces;
 using Estudos.MongoDb.Infrastructure.Mongo.DataBase;
 using Estudos.MongoDb.Infrastructure.Mongo.Interfaces;
 using Estudos.MongoDb.Infrastructure.Mongo.Mappings;
@@ -29,7 +29,7 @@ public static class MongoDbExtension
     private static void AddRepositories(this IServiceCollection services)
     {
         services.AddSingleton<IMongoClientDatabase, MongoClientDatabase>();
-        services.AddScoped<IRestauranteRepository, RestauranteRepository>();
+        services.AddScoped<IRestauranteRepository, RestauranteMongoRepository>();
     }
 
     private static void AddAutoMapperToInfrastructure(this IServiceCollection services)

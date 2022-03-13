@@ -17,7 +17,6 @@
     <Folder Include="Interfaces\" />
     <Folder Include="DataBase\" />
     <Folder Include="Profiles\" />
-    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
