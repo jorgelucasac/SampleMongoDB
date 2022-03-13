@@ -12,6 +12,7 @@ public static class Startup
         services.AddVersionamento();
         services.AddSwaggerConfiguration();
         services.AddApplicationServices();
+        services.AddAutoMapperExtension();
 
         return services;
     }

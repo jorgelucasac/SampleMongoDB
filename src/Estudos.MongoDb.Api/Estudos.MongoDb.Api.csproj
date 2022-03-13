@@ -26,4 +26,8 @@
     <ProjectReference Include="..\Estudos.MongoDb.Application\Estudos.MongoDb.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Profiles\" />
+  </ItemGroup>
+
 </Project>
