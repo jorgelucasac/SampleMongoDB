@@ -32,8 +32,8 @@ public class RestaurantsController : MainController
         return BadRequest(output.MapToApiErrorResponse());
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetAsync(string id, CancellationToken cancellationToken)
+    [HttpGet("{id}", Name = nameof(GetByIdAsync))]
+    public async Task<IActionResult> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
         var output = await _mediator.Send(new GetRestaurantByIdInput(id), cancellationToken);
 
@@ -49,9 +49,10 @@ public class RestaurantsController : MainController
         var input = _mapper.Map<CreateRestaurantInput>(request);
         var output = await _mediator.Send(input, cancellationToken);
 
-        if (output.IsValid)
-            return Ok(output.Result);
+        if (output.IsInvalid)
+            return BadRequest(output.MapToApiErrorResponse());
 
-        return BadRequest(output.MapToApiErrorResponse());
+        var result = output.Result as CreateRestaurantOutput;
+        return CreatedAtRoute(nameof(GetByIdAsync), new { result.Id }, result);
     }
 }
