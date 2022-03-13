@@ -8,10 +8,10 @@ namespace Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 
 public class GetAllRestaurantsUseCase : IGetAllRestaurantsUseCase
 {
-    private readonly IRestauranteRepository _repository;
+    private readonly IRestaurantRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetAllRestaurantsUseCase(IRestauranteRepository repository, IMapper mapper)
+    public GetAllRestaurantsUseCase(IRestaurantRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -24,12 +24,12 @@ public class GetAllRestaurantsUseCase : IGetAllRestaurantsUseCase
         return GetAllRestaurantsSuccessfully(restaurants);
     }
 
-    public Output GetAllRestaurantsSuccessfully(PagedResult<Restaurante> pagedResult)
+    public Output GetAllRestaurantsSuccessfully(PagedResult<Restaurant> pagedResult)
     {
         return new Output(GetPageListOutput(pagedResult));
     }
 
-    private PageListOutput<GetAllRestaurantsOutput> GetPageListOutput(PagedResult<Restaurante> pagedResult)
+    private PageListOutput<GetAllRestaurantsOutput> GetPageListOutput(PagedResult<Restaurant> pagedResult)
     {
         var getAllRestaurantsOutput = _mapper.Map<IEnumerable<GetAllRestaurantsOutput>>(pagedResult.Items);
 

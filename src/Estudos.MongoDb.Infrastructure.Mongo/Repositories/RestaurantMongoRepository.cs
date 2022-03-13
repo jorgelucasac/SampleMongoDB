@@ -8,33 +8,33 @@ using MongoDB.Driver;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Repositories;
 
-public class RestauranteMongoRepository : MongoRepositoryBase<RestauranteSchema>, IRestauranteRepository
+public class RestaurantMongoRepository : MongoRepositoryBase<RestauranteSchema>, IRestaurantRepository
 {
-    protected override string CollectionName => nameof(Restaurante);
+    protected override string CollectionName => nameof(Restaurant);
     private readonly IMapper _mapper;
 
-    public RestauranteMongoRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) : base(mongoClientDatabase)
+    public RestaurantMongoRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) : base(mongoClientDatabase)
     {
         _mapper = mapper;
     }
 
-    public async Task<string> Create(Restaurante restaurante, CancellationToken cancellationToken)
+    public async Task<string> Create(Restaurant restaurant, CancellationToken cancellationToken)
     {
-        var restauranteSchema = _mapper.Map<RestauranteSchema>(restaurante);
+        var restauranteSchema = _mapper.Map<RestauranteSchema>(restaurant);
         await Collection.InsertOneAsync(restauranteSchema, new InsertOneOptions(), cancellationToken);
 
         return restauranteSchema.Id;
     }
 
-    public async Task<PagedResult<Restaurante>> GetAll(IPagedQuery query, CancellationToken cancellationToken)
+    public async Task<PagedResult<Restaurant>> GetAll(IPagedQuery query, CancellationToken cancellationToken)
     {
         var resultCount = await Collection.CountDocumentsAsync(a => true, cancellationToken: cancellationToken);
-        if (resultCount == 0) return PagedResult<Restaurante>.Empty();
+        if (resultCount == 0) return PagedResult<Restaurant>.Empty();
 
         var filter = GetFilter(query.Filter);
 
         var pageFilter = PageQueryFilter.Of(query, (int)resultCount);
-        var restaurantes = new List<Restaurante>();
+        var restaurantes = new List<Restaurant>();
 
         await Collection.Find(filter)
             .Sort(GetSort(query.SortOrder, query.OrderBy))
@@ -42,10 +42,10 @@ public class RestauranteMongoRepository : MongoRepositoryBase<RestauranteSchema>
             .Limit(pageFilter.ResultCountPerPage)
             .ForEachAsync(schema =>
             {
-                restaurantes.Add(_mapper.Map<Restaurante>(schema));
+                restaurantes.Add(_mapper.Map<Restaurant>(schema));
             }, cancellationToken);
 
-        return PagedResult<Restaurante>.Create(restaurantes, pageFilter.Page, pageFilter.ResultCountPerPage,
+        return PagedResult<Restaurant>.Create(restaurantes, pageFilter.Page, pageFilter.ResultCountPerPage,
             pageFilter.PageCount, pageFilter.ResultCount);
     }
 

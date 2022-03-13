@@ -10,6 +10,6 @@ public class RestauranteSchema
     public string Id { get; set; }
 
     public string Nome { get; set; }
-    public Cozinha Cozinha { get; set; }
+    public Country Country { get; set; }
     public EnderecoSchema Endereco { get; set; }
 }

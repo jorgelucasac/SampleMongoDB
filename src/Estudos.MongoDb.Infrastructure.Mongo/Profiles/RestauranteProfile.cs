@@ -10,13 +10,13 @@ public class RestauranteProfile : Profile
 {
     public RestauranteProfile()
     {
-        CreateMap<Restaurante, RestauranteSchema>();
-        CreateMap<Endereco, EnderecoSchema>();
+        CreateMap<Restaurant, RestauranteSchema>();
+        CreateMap<Address, EnderecoSchema>();
 
-        CreateMap<RestauranteSchema, Restaurante>()
-            .ForMember(dest => dest.Endereco, opt => opt.Ignore())
-            .ConstructUsing(src => new Restaurante(src.Nome, (Cozinha)src.Cozinha))
+        CreateMap<RestauranteSchema, Restaurant>()
+            .ForMember(dest => dest.Address, opt => opt.Ignore())
+            .ConstructUsing(src => new Restaurant(src.Nome, (Country)src.Country))
             .AfterMap((src, dest) => dest
-                .AtribuirEndereco(new Endereco(src.Endereco.Logradouro, src.Endereco.Numero, src.Endereco.Cidade, src.Endereco.UF, src.Endereco.Cep)));
+                .SetAddress(new Address(src.Endereco.Logradouro, src.Endereco.Numero, src.Endereco.Cidade, src.Endereco.UF, src.Endereco.Cep)));
     }
 }

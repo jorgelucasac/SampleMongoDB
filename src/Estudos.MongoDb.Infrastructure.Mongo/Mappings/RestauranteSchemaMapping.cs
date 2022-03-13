@@ -19,8 +19,8 @@ internal static class RestauranteSchemaMapping
             map.MapMember(x => x.Nome)
                 .SetIsRequired(true);
 
-            map.MapMember(c => c.Cozinha)
-                .SetSerializer(new EnumSerializer<Cozinha>(BsonType.String));
+            map.MapMember(c => c.Country)
+                .SetSerializer(new EnumSerializer<Country>(BsonType.String));
         });
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Estudos.MongoDb.Domain.Enums
 {
-    public enum Cozinha
+    public enum Country
     {
         Brasileira = 1,
         Italiana = 2,
