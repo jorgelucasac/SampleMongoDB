@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
 namespace Estudos.MongoDb.Api.Extensions;
@@ -7,6 +9,9 @@ public static class SwaggerExtension
 {
     public static void AddSwaggerConfiguration(this IServiceCollection services)
     {
+        //configurando o versionamento da documentação
+        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+
         services.AddSwaggerGen(c =>
         {
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -29,8 +34,13 @@ public static class SwaggerExtension
         {
             //gera um end point para cada versao
             foreach (var description in provider.ApiVersionDescriptions)
-                c.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
-                    "Api MongoDb - " + description.GroupName.ToUpperInvariant());
+            {
+                var notice = description.IsDeprecated ? "Esta versão está obsoleta" : string.Empty;
+
+                c.SwaggerEndpoint(
+                    $"/swagger/{description.GroupName}/swagger.json",
+                    $"Api MongoDb - {description.GroupName.ToUpperInvariant()} {notice}");
+            }
         });
     }
 }

@@ -15,7 +15,7 @@ public abstract class BaseUseCase
         return Output;
     }
 
-    protected Output Successfully(object result)
+    protected Output Successfully(object result = null)
     {
         Output.AddResult(result);
         return Output;

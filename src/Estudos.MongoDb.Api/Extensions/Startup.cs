@@ -9,6 +9,7 @@ public static class Startup
     public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddControllers();
+        services.AddRouting(opt => opt.LowercaseUrls = true);
         services.AddEndpointsApiExplorer();
 
         services.AddVersionamento();

@@ -2,15 +2,16 @@
 using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
+using Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 using Estudos.MongoDb.Domain.Entities;
 using Estudos.MongoDb.Domain.Enums;
 using Estudos.MongoDb.Domain.ValueObjects;
 
 namespace Estudos.MongoDb.Application.Profiles;
 
-public class CreateRestaurantProfile : Profile
+public class RestaurantProfile : Profile
 {
-    public CreateRestaurantProfile()
+    public RestaurantProfile()
     {
         CreateMap<CreateRestaurantInput, Restaurant>()
             .ConstructUsing(src => new Restaurant(src.Name, (Country)src.Country))
@@ -33,5 +34,10 @@ public class CreateRestaurantProfile : Profile
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
             .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Address.State))
             .ForMember(dest => dest.ZipCode, opt => opt.MapFrom(src => src.Address.ZipCode));
+
+        CreateMap<UpdateRestaurantInput, Restaurant>()
+            .ConstructUsing(src => new Restaurant(src.Id, src.Name, (Country)src.Country))
+            .AfterMap((src, dest) => dest
+                .SetAddress(new Address(src.PublicPlace, src.Number, src.City, src.State, src.ZipCode)));
     }
 }

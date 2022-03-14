@@ -1,18 +1,29 @@
 ﻿using Estudos.MongoDb.Domain.Enums;
 using FluentValidation;
 
-namespace Estudos.MongoDb.Application.UseCases.CreateRestaurant;
+namespace Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 
-public class CreateRestaurantInputValidation : AbstractValidator<CreateRestaurantInput>
+public class UpdateRestaurantInputValidation : AbstractValidator<UpdateRestaurantInput>
 {
-    public CreateRestaurantInputValidation()
+    public const int IdLength = 24;
+
+    public UpdateRestaurantInputValidation()
     {
         ValidatePublicPlace();
+        ValidateId();
         ValidateCity();
         ValidateState();
         ValidateZipCode();
         ValidateName();
         ValidateCountry();
+    }
+
+    private void ValidateId()
+    {
+        RuleFor(a => a.Id)
+            .NotEmpty()
+            .Length(IdLength)
+            .WithMessage("'{PropertyName}' deve ter {MaxLength} caracteres. Você digitou {TotalLength} caracteres.");
     }
 
     private void ValidateName()

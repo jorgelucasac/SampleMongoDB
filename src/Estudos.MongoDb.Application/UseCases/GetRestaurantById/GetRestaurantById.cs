@@ -4,12 +4,12 @@ using Estudos.MongoDb.Domain.Data.Interfaces;
 
 namespace Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 
-public class GetRestaurantByIdUseCase : BaseUseCase, IGetRestaurantByIdUseCase
+public class GetRestaurantById : BaseUseCase, IGetRestaurantByIdUseCase
 {
     private readonly IRestaurantRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetRestaurantByIdUseCase(IRestaurantRepository repository, IMapper mapper)
+    public GetRestaurantById(IRestaurantRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
