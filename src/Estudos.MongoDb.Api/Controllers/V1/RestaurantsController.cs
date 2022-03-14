@@ -40,7 +40,7 @@ public class RestaurantsController : MainController
         if (output.IsInvalid)
             return BadRequest(output.MapToApiErrorResponse());
 
-        return output.Result is null ? NotFound() : Ok(output.Result);
+        return output.IsNotFound ? NotFound() : Ok(output.Result);
     }
 
     [HttpPost]
