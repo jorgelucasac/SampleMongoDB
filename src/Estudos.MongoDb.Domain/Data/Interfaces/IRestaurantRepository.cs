@@ -1,12 +1,8 @@
-﻿using Estudos.MongoDb.Domain.Entities;
+﻿using Estudos.MongoDb.Domain.Enums;
 
 namespace Estudos.MongoDb.Domain.Data.Interfaces;
 
-public interface IRestaurantRepository
+public interface IRestaurantRepository : IRepository
 {
-    Task<string> Create(Restaurant restaurant, CancellationToken cancellationToken);
-
-    Task<PagedResult<Restaurant>> GetAll(IPagedQuery query, CancellationToken cancellationToken);
-
-    Task<Restaurant> GetById(string id, CancellationToken cancellationToken);
+    Task<bool> UpdateCountry(string id, Country country, CancellationToken cancellationToken);
 }
