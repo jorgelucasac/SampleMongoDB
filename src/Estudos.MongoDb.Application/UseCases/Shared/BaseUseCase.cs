@@ -14,4 +14,10 @@ public abstract class BaseUseCase
         Output.SetNotFound();
         return Output;
     }
+
+    protected Output Successfully(object result)
+    {
+        Output.AddResult(result);
+        return Output;
+    }
 }
