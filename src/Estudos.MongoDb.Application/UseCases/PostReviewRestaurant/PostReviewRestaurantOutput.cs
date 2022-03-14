@@ -1,6 +1,6 @@
 ﻿namespace Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 
-internal class PostReviewRestaurantOutput
+public class PostReviewRestaurantOutput
 {
     public string RestaurantId { get; set; }
     public int Stars { get; set; }

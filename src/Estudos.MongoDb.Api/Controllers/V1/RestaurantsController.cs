@@ -1,4 +1,5 @@
 using AutoMapper;
+using Estudos.MongoDb.Api.Filters;
 using Estudos.MongoDb.Api.Transports.Requests;
 using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
@@ -23,6 +24,10 @@ public class RestaurantsController : MainController
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(GetAllRestaurantsOutput), StatusCodes.Status200OK)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
     public async Task<IActionResult> GetAsync([FromQuery] GetAllRestaurantsRequest request,
         CancellationToken cancellationToken)
     {
@@ -33,6 +38,10 @@ public class RestaurantsController : MainController
     }
 
     [HttpGet("{id}", Name = nameof(GetByIdAsync))]
+    [ProducesResponseType(typeof(GetRestaurantByIdOutput), StatusCodes.Status200OK)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
     public async Task<IActionResult> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
         var output = await _mediator.Send(new GetRestaurantByIdInput(id), cancellationToken);
@@ -40,6 +49,10 @@ public class RestaurantsController : MainController
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(CreateRestaurantOutput), StatusCodes.Status201Created)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
     public async Task<IActionResult> PostAsync(CreateRestaurantRequest request, CancellationToken cancellationToken)
     {
         var input = _mapper.Map<CreateRestaurantInput>(request);
@@ -49,6 +62,10 @@ public class RestaurantsController : MainController
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
     public async Task<IActionResult> PutAsync(string id, UpdateRestaurantRequest request, CancellationToken cancellationToken)
     {
         var input = _mapper.Map<UpdateRestaurantInput>(request);
@@ -59,6 +76,10 @@ public class RestaurantsController : MainController
     }
 
     [HttpPatch("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
     public async Task<IActionResult> PatchAsync(string id, PatchRestaurantRequest request, CancellationToken cancellationToken)
     {
         var input = _mapper.Map<PatchRestaurantInput>(request);
@@ -69,6 +90,10 @@ public class RestaurantsController : MainController
     }
 
     [HttpPost("{id}/review")]
+    [ProducesResponseType(typeof(PostReviewRestaurantOutput), StatusCodes.Status201Created)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
     public async Task<IActionResult> PostReviewAsync(string id, CreateReviewRequest request, CancellationToken cancellationToken)
     {
         var input = _mapper.Map<PostReviewRestaurantInput>(request);
