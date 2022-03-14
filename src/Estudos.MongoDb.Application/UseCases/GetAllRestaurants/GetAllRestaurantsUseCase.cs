@@ -6,7 +6,7 @@ using Estudos.MongoDb.Domain.Entities;
 
 namespace Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 
-public class GetAllRestaurantsUseCase : IGetAllRestaurantsUseCase
+public class GetAllRestaurantsUseCase : BaseUseCase, IGetAllRestaurantsUseCase
 {
     private readonly IRestaurantRepository _repository;
     private readonly IMapper _mapper;
@@ -26,7 +26,8 @@ public class GetAllRestaurantsUseCase : IGetAllRestaurantsUseCase
 
     public Output GetAllRestaurantsSuccessfully(PagedResult<Restaurant> pagedResult)
     {
-        return new Output(GetPageListOutput(pagedResult));
+        Output.AddResult(GetPageListOutput(pagedResult));
+        return Output;
     }
 
     private PageListOutput<GetAllRestaurantsOutput> GetPageListOutput(PagedResult<Restaurant> pagedResult)

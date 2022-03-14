@@ -5,7 +5,7 @@ using Estudos.MongoDb.Domain.Entities;
 
 namespace Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 
-public class CreateRestaurantUseCase : ICreateRestaurantUseCase
+public class CreateRestaurantUseCase : BaseUseCase, ICreateRestaurantUseCase
 {
     private readonly IMapper _mapper;
     private readonly IRestaurantRepository _repository;
@@ -28,6 +28,8 @@ public class CreateRestaurantUseCase : ICreateRestaurantUseCase
     {
         var restaurantOutput = _mapper.Map<CreateRestaurantOutput>(restaurant);
         restaurantOutput.Id = id;
-        return new Output(restaurantOutput);
+
+        Output.AddResult(restaurantOutput);
+        return Output;
     }
 }
