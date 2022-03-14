@@ -1,4 +1,4 @@
-﻿using Estudos.MongoDb.Domain.Enums;
+﻿using Estudos.MongoDb.Application.Helper;
 using FluentValidation;
 
 namespace Estudos.MongoDb.Application.UseCases.CreateRestaurant;
@@ -25,7 +25,7 @@ public class CreateRestaurantInputValidation : AbstractValidator<CreateRestauran
     private void ValidateCountry()
     {
         RuleFor(c => c.Country)
-            .Must(CountryIsInEnum).WithMessage("{PropertyValue} não é um valor válido para '{PropertyName}'")
+            .Must(EnumHelper.IsInCountryEnum).WithMessage("{PropertyValue} não é um valor válido para '{PropertyName}'")
             .NotEmpty();
     }
 
@@ -55,10 +55,5 @@ public class CreateRestaurantInputValidation : AbstractValidator<CreateRestauran
         RuleFor(c => c.ZipCode)
             .NotEmpty()
             .Length(8);
-    }
-
-    private bool CountryIsInEnum(int country)
-    {
-        return Enum.IsDefined(typeof(Country), country);
     }
 }

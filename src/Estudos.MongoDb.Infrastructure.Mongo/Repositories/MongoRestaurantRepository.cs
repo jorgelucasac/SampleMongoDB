@@ -98,15 +98,23 @@ public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, 
         }
     }
 
-    public async Task<bool> UpdateCountry(string id, Country country, CancellationToken cancellationToken)
+    public async Task<bool> UpdateCountryAndName(string id, Country? country, string? name, CancellationToken cancellationToken)
     {
         try
         {
-            var update = Builders<RestaurantSchema>.Update.Set(x => x.Country, country);
+            if (country is not null)
+            {
+                var update = Builders<RestaurantSchema>.Update.Set(x => x.Country, country);
+                var resultCountry = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
+            }
 
-            var resultado = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
+            if (!string.IsNullOrEmpty(name))
+            {
+                var update = Builders<RestaurantSchema>.Update.Set(x => x.Name, name);
+                var resultName = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
+            }
 
-            return resultado.ModifiedCount > 0;
+            return true;
         }
         catch (Exception e)
         {
