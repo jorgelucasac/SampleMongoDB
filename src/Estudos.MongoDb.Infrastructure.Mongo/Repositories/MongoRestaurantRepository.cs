@@ -68,6 +68,20 @@ public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, 
         }
     }
 
+    public async Task<bool> Exists(string id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await Collection
+                  .Find(a => a.Id == id)
+                  .AnyAsync(cancellationToken);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
     public async Task<bool> Update(Restaurant restaurant, CancellationToken cancellationToken)
     {
         try

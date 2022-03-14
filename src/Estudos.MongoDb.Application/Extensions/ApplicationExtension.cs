@@ -32,10 +32,6 @@ public static class ApplicationExtension
     private static IServiceCollection AddValidators(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(typeof(RestaurantProfile).Assembly);
-        //AssemblyScanner
-        //    .FindValidatorsInAssembly(typeof(RestaurantProfile).Assembly)
-        //    .ForEach(result => services.AddScoped(result.InterfaceType, result.ValidatorType));
-
         return services;
     }
 

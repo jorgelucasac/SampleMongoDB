@@ -10,5 +10,7 @@ public interface IRepository
 
     Task<Restaurant> GetById(string id, CancellationToken cancellationToken);
 
+    Task<bool> Exists(string id, CancellationToken cancellationToken);
+
     Task<bool> Update(Restaurant restaurant, CancellationToken cancellationToken);
 }
