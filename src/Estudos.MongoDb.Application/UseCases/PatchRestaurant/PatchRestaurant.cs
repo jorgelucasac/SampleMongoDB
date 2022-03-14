@@ -21,6 +21,6 @@ public class PatchRestaurant : BaseUseCase, IPatchRestaurantUseCase
         if (notExists) NotFound();
 
         await _repository.UpdateCountryAndName(request.Id, request.GetCountryEnum(), request.Name, cancellationToken);
-        return Successfully();
+        return Success();
     }
 }

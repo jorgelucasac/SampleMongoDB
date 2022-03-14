@@ -4,6 +4,7 @@ using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 using Estudos.MongoDb.Application.UseCases.PatchRestaurant;
+using Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 using Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -65,5 +66,15 @@ public class RestaurantsController : MainController
 
         var output = await _mediator.Send(input, cancellationToken);
         return ResponsePutPatchDelete(output);
+    }
+
+    [HttpPost("{id}/review")]
+    public async Task<IActionResult> PostReviewAsync(string id, CreateReviewRequest request, CancellationToken cancellationToken)
+    {
+        var input = _mapper.Map<PostReviewRestaurantInput>(request);
+        input.SetRestaurantId(id);
+
+        var output = await _mediator.Send(input, cancellationToken);
+        return ResponseSubPost(output);
     }
 }

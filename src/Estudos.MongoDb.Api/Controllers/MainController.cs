@@ -31,4 +31,12 @@ public abstract class MainController : ControllerBase
 
         return BadRequest(output.MapToApiErrorResponse());
     }
+
+    protected IActionResult ResponseSubPost(Output output)
+    {
+        if (output.IsValid) return StatusCode(StatusCodes.Status201Created, output.Result);
+        if (output.IsNotFound) return NotFound();
+
+        return BadRequest(output.MapToApiErrorResponse());
+    }
 }

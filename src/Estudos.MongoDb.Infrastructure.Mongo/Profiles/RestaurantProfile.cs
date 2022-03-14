@@ -19,5 +19,7 @@ public class RestaurantProfile : Profile
             .AfterMap((src, dest) => dest
                 .SetAddress(new Address(src.Address.PublicPlace, src.Address.Number, src.Address.City,
                     src.Address.State, src.Address.ZipCode)));
+
+        CreateMap<Review, ReviewSchema>();
     }
 }

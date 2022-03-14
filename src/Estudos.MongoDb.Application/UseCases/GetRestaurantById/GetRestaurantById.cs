@@ -23,6 +23,6 @@ public class GetRestaurantById : BaseUseCase, IGetRestaurantByIdUseCase
             return NotFound();
 
         var restaurantOutput = _mapper.Map<GetRestaurantByIdOutput>(restaurant);
-        return Successfully(restaurantOutput);
+        return Success(restaurantOutput);
     }
 }

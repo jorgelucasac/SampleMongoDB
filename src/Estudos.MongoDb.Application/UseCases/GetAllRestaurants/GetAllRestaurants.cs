@@ -21,7 +21,7 @@ public class GetAllRestaurants : BaseUseCase, IGetAllRestaurantsUseCase
     {
         var restaurants = await _repository.GetAll(request, cancellationToken);
 
-        return Successfully(GetPageListOutput(restaurants));
+        return Success(GetPageListOutput(restaurants));
     }
 
     private PageListOutput<GetAllRestaurantsOutput> GetPageListOutput(PagedResult<Restaurant> pagedResult)

@@ -32,6 +32,6 @@ public class CreateRestaurant : BaseUseCase, ICreateRestaurantUseCase
         Output.SetId(id);
         Output.AddResult(restaurantOutput);
 
-        return Successfully(restaurantOutput);
+        return Success(restaurantOutput);
     }
 }

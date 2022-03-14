@@ -3,6 +3,7 @@ using Estudos.MongoDb.Domain.Data;
 using Estudos.MongoDb.Domain.Data.Interfaces;
 using Estudos.MongoDb.Domain.Entities;
 using Estudos.MongoDb.Domain.Enums;
+using Estudos.MongoDb.Domain.ValueObjects;
 using Estudos.MongoDb.Infrastructure.Mongo.Interfaces;
 using Estudos.MongoDb.Infrastructure.Mongo.Schemas;
 using MongoDB.Bson;
@@ -11,15 +12,17 @@ using System.Text.RegularExpressions;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Repositories;
 
-public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRestaurantRepository
+public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRestaurantRepository
 {
     protected override string CollectionName => nameof(Restaurant);
+    private readonly IMongoCollection<ReviewSchema> _reviewCollection;
     private readonly IMapper _mapper;
 
-    public MongoRestaurantRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) : base(
-        mongoClientDatabase)
+    public RestaurantRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) :
+        base(mongoClientDatabase)
     {
         _mapper = mapper;
+        _reviewCollection = mongoClientDatabase.Database.GetCollection<ReviewSchema>(nameof(Review));
     }
 
     public async Task<string> Create(Restaurant restaurant, CancellationToken cancellationToken)
@@ -98,7 +101,7 @@ public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, 
         }
     }
 
-    public async Task<bool> UpdateCountryAndName(string id, Country? country, string? name, CancellationToken cancellationToken)
+    public async Task<bool> UpdateCountryAndName(string id, Country? country, string name, CancellationToken cancellationToken)
     {
         try
         {
@@ -120,6 +123,12 @@ public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, 
         {
             return false;
         }
+    }
+
+    public async Task AddReview(Review review, CancellationToken cancellationToken)
+    {
+        var reviewSchema = _mapper.Map<ReviewSchema>(review);
+        await _reviewCollection.InsertOneAsync(reviewSchema, new InsertOneOptions(), cancellationToken);
     }
 
     private FilterDefinition<RestaurantSchema> GetFilter(string filter)

@@ -24,6 +24,6 @@ public class UpdateRestaurant : BaseUseCase, IUpdateRestaurantUseCase
         var restaurant = _mapper.Map<Restaurant>(request);
         await _repository.Update(restaurant, cancellationToken);
 
-        return Successfully();
+        return Success();
     }
 }
