@@ -1,5 +1,4 @@
 using AutoMapper;
-using Estudos.MongoDb.Api.Extensions;
 using Estudos.MongoDb.Api.Transports.Requests;
 using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
@@ -28,21 +27,14 @@ public class RestaurantsController : MainController
         var input = _mapper.Map<GetAllRestaurantsInput>(request);
         var output = await _mediator.Send(input, cancellationToken);
 
-        if (output.IsValid)
-            return Ok(output.Result);
-
-        return BadRequest(output.MapToApiErrorResponse());
+        return ResponseGet(output);
     }
 
     [HttpGet("{id}", Name = nameof(GetByIdAsync))]
     public async Task<IActionResult> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
         var output = await _mediator.Send(new GetRestaurantByIdInput(id), cancellationToken);
-
-        if (output.IsInvalid)
-            return BadRequest(output.MapToApiErrorResponse());
-
-        return output.IsNotFound ? NotFound() : Ok(output.Result);
+        return ResponseGet(output);
     }
 
     [HttpPost]
@@ -51,11 +43,7 @@ public class RestaurantsController : MainController
         var input = _mapper.Map<CreateRestaurantInput>(request);
         var output = await _mediator.Send(input, cancellationToken);
 
-        if (output.IsInvalid)
-            return BadRequest(output.MapToApiErrorResponse());
-
-        var result = output.Result as CreateRestaurantOutput;
-        return CreatedAtRoute(nameof(GetByIdAsync), new { result.Id }, result);
+        return ResponsePost(output, nameof(GetByIdAsync));
     }
 
     [HttpPut("{id}")]
@@ -65,9 +53,6 @@ public class RestaurantsController : MainController
         input.SetId(id);
 
         var output = await _mediator.Send(input, cancellationToken);
-        if (output.IsValid)
-            return NoContent();
-
-        return BadRequest(output.MapToApiErrorResponse());
+        return ResponsePutPatchDelete(output);
     }
 }

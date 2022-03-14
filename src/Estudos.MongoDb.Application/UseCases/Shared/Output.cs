@@ -29,13 +29,19 @@ public class Output
 
     public object Result { get; private set; }
     public IReadOnlyCollection<string> Erros => _erros.AsReadOnly();
-    public bool IsValid => !IsInvalid;
+    public bool IsValid => !IsInvalid && !IsNotFound;
     public bool IsInvalid => _erros.Any();
     public bool IsNotFound { get; private set; }
+    public string Id { get; private set; }
 
     public void AddResult(object result)
     {
         Result = result;
+    }
+
+    public void SetId(string id)
+    {
+        Id = id;
     }
 
     public void SetNotFound()

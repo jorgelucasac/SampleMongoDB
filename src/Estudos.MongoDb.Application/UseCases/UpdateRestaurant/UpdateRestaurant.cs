@@ -5,12 +5,12 @@ using Estudos.MongoDb.Domain.Entities;
 
 namespace Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 
-public class UpdateRestaurantUseCase : BaseUseCase, IUpdateRestaurantUseCase
+public class UpdateRestaurant : BaseUseCase, IUpdateRestaurantUseCase
 {
     private readonly IRestaurantRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateRestaurantUseCase(IRestaurantRepository repository, IMapper mapper)
+    public UpdateRestaurant(IRestaurantRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -20,8 +20,8 @@ public class UpdateRestaurantUseCase : BaseUseCase, IUpdateRestaurantUseCase
     {
         var restaurant = _mapper.Map<Restaurant>(request);
 
-        await _repository.Update(restaurant, cancellationToken);
+        var success = await _repository.Update(restaurant, cancellationToken);
 
-        return Successfully();
+        return success ? Successfully() : NotFound();
     }
 }
