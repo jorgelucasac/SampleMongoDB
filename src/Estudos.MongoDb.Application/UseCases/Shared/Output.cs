@@ -13,10 +13,10 @@ public class Output
         _erros = new List<string>();
     }
 
-    public Output(List<string> _erros)
+    public Output(List<string> erros)
     {
         _erros = new List<string>();
-        AddErros(_erros);
+        AddErros(erros);
     }
 
     public Output(string erro)
@@ -31,10 +31,16 @@ public class Output
     public IReadOnlyCollection<string> Erros => _erros.AsReadOnly();
     public bool IsValid => !IsInvalid;
     public bool IsInvalid => _erros.Any();
+    public bool IsNotFound { get; private set; }
 
     public void AddResult(object result)
     {
         Result = result;
+    }
+
+    public void SetNotFound()
+    {
+        IsNotFound = true;
     }
 
     public void AddErro(string erro)

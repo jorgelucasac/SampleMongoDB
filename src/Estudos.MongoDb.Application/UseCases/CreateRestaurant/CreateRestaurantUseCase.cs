@@ -28,6 +28,6 @@ public class CreateRestaurantUseCase : ICreateRestaurantUseCase
     {
         var restaurantOutput = _mapper.Map<CreateRestaurantOutput>(restaurant);
         restaurantOutput.Id = id;
-        ; return new Output(restaurantOutput);
+        return new Output(restaurantOutput);
     }
 }
