@@ -29,7 +29,7 @@ public static class MongoDbExtension
     private static void AddRepositories(this IServiceCollection services)
     {
         services.AddSingleton<IMongoClientDatabase, MongoClientDatabase>();
-        services.AddScoped<IRestaurantRepository, RestaurantMongoRepository>();
+        services.AddScoped<IRestaurantRepository, MongoRestaurantRepository>();
     }
 
     private static void AddAutoMapperToInfrastructure(this IServiceCollection services)

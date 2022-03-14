@@ -2,6 +2,7 @@
 using Estudos.MongoDb.Domain.Data;
 using Estudos.MongoDb.Domain.Data.Interfaces;
 using Estudos.MongoDb.Domain.Entities;
+using Estudos.MongoDb.Domain.Enums;
 using Estudos.MongoDb.Infrastructure.Mongo.Interfaces;
 using Estudos.MongoDb.Infrastructure.Mongo.Schemas;
 using MongoDB.Bson;
@@ -10,12 +11,12 @@ using System.Text.RegularExpressions;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Repositories;
 
-public class RestaurantMongoRepository : MongoRepositoryBase<RestaurantSchema>, IRestaurantRepository
+public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRestaurantRepository
 {
     protected override string CollectionName => nameof(Restaurant);
     private readonly IMapper _mapper;
 
-    public RestaurantMongoRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) : base(mongoClientDatabase)
+    public MongoRestaurantRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) : base(mongoClientDatabase)
     {
         _mapper = mapper;
     }
@@ -66,6 +67,24 @@ public class RestaurantMongoRepository : MongoRepositoryBase<RestaurantSchema>, 
         {
             return null;
         }
+    }
+
+    public async Task<bool> Update(Restaurant restaurant, CancellationToken cancellationToken)
+    {
+        var restaurantSchema = _mapper.Map<RestaurantSchema>(restaurant);
+        var result = await Collection
+            .ReplaceOneAsync(x => x.Id == restaurantSchema.Id, restaurantSchema, cancellationToken: cancellationToken);
+
+        return result.ModifiedCount > 0;
+    }
+
+    public async Task<bool> UpdateCountry(string id, Country country, CancellationToken cancellationToken)
+    {
+        var update = Builders<RestaurantSchema>.Update.Set(x => x.Country, country);
+
+        var resultado = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
+
+        return resultado.ModifiedCount > 0;
     }
 
     private FilterDefinition<RestaurantSchema> GetFilter(string filter)
