@@ -29,6 +29,7 @@ public class GetAllRestaurantsUseCase : BaseUseCase, IGetAllRestaurantsUseCase
         var getAllRestaurantsOutput = _mapper.Map<IEnumerable<GetAllRestaurantsOutput>>(pagedResult.Items);
 
         return new PageListOutput<GetAllRestaurantsOutput>
-            (getAllRestaurantsOutput, (int)pagedResult.TotalItems, (int)pagedResult.Total, pagedResult.CurrentPage, pagedResult.ResultsPerPage);
+        (getAllRestaurantsOutput, (int)pagedResult.TotalItems, (int)pagedResult.Total, pagedResult.CurrentPage,
+            pagedResult.ResultsPerPage);
     }
 }

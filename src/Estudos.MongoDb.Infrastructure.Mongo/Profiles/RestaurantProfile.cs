@@ -17,6 +17,7 @@ public class RestaurantProfile : Profile
             .ForMember(dest => dest.Address, opt => opt.Ignore())
             .ConstructUsing(src => new Restaurant(src.Name, (Country)src.Country))
             .AfterMap((src, dest) => dest
-                .SetAddress(new Address(src.Address.PublicPlace, src.Address.Number, src.Address.City, src.Address.State, src.Address.ZipCode)));
+                .SetAddress(new Address(src.Address.PublicPlace, src.Address.Number, src.Address.City,
+                    src.Address.State, src.Address.ZipCode)));
     }
 }

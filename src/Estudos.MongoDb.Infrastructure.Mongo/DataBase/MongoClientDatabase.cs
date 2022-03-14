@@ -9,10 +9,7 @@ public class MongoClientDatabase : IMongoClientDatabase
 {
     public MongoClientDatabase(IOptions<MongoDbOptions> settings)
     {
-        if (settings is null)
-        {
-            throw new ArgumentNullException(nameof(settings));
-        }
+        if (settings is null) throw new ArgumentNullException(nameof(settings));
 
         MongoClient = new MongoClient(settings.Value.ConnectionString);
         Database = MongoClient.GetDatabase(settings.Value.DatabaseName);

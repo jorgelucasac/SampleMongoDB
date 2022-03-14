@@ -21,7 +21,8 @@ public class RestaurantsController : MainController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAsync([FromQuery] GetAllRestaurantsRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAsync([FromQuery] GetAllRestaurantsRequest request,
+        CancellationToken cancellationToken)
     {
         var input = _mapper.Map<GetAllRestaurantsInput>(request);
         var output = await _mediator.Send(input, cancellationToken);

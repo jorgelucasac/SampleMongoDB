@@ -22,16 +22,15 @@ public abstract class MongoRepositoryBase<T> where T : class
 
     protected SortDefinition<T> GetSort(SortOrder order, string propertyName)
     {
-        propertyName =  string.IsNullOrEmpty(propertyName) ? DefaultSortField : propertyName;
+        propertyName = string.IsNullOrEmpty(propertyName) ? DefaultSortField : propertyName;
         var @type = typeof(T);
 
         var parameter = Expression.Parameter(@type);
-        var property = Expression.Property(parameter, @type.GetProperty(propertyName, BindingFlags.IgnoreCase |  BindingFlags.Public | BindingFlags.Instance));
+        var property = Expression.Property(parameter,
+            @type.GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance));
         var conversion = Expression.Convert(property, typeof(object));
         var lambda = Expression.Lambda<Func<T, object>>(conversion, parameter);
 
-        return order == SortOrder.Asc ?
-            Builders<T>.Sort.Ascending(lambda) :
-            Builders<T>.Sort.Descending(lambda);
+        return order == SortOrder.Asc ? Builders<T>.Sort.Ascending(lambda) : Builders<T>.Sort.Descending(lambda);
     }
 }

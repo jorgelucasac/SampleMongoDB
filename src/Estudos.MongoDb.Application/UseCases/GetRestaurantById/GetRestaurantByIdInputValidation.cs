@@ -15,6 +15,7 @@ public class GetRestaurantByIdInputValidation : AbstractValidator<GetRestaurantB
     {
         RuleFor(a => a.Id)
             .NotEmpty()
-            .Length(IdLength).WithMessage("'{PropertyName}' deve ter {MaxLength} caracteres. Você digitou {TotalLength} caracteres.");
+            .Length(IdLength)
+            .WithMessage("'{PropertyName}' deve ter {MaxLength} caracteres. Você digitou {TotalLength} caracteres.");
     }
 }

@@ -13,7 +13,8 @@ public abstract class PagedResultBase
     public long Total { get; set; }
 
     protected PagedResultBase()
-    { }
+    {
+    }
 
     protected PagedResultBase(int currentPage, int resultsPerPage,
         int totalPages, int totalItems, long total)

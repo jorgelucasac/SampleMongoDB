@@ -1,27 +1,26 @@
 ﻿using Estudos.MongoDb.Domain.Entities;
 using FluentValidation;
 
-namespace Estudos.MongoDb.Domain.Validations
+namespace Estudos.MongoDb.Domain.Validations;
+
+internal class RestaurantValidation : AbstractValidator<Restaurant>
 {
-    internal class RestaurantValidation : AbstractValidator<Restaurant>
+    public RestaurantValidation()
     {
-        public RestaurantValidation()
-        {
-            ValidateName();
-            ValidateCountry();
-        }
+        ValidateName();
+        ValidateCountry();
+    }
 
-        private void ValidateName()
-        {
-            RuleFor(c => c.Name)
-                .NotEmpty()
-                .MaximumLength(30);
-        }
+    private void ValidateName()
+    {
+        RuleFor(c => c.Name)
+            .NotEmpty()
+            .MaximumLength(30);
+    }
 
-        private void ValidateCountry()
-        {
-            RuleFor(c => c.Country)
-                .NotEmpty();
-        }
+    private void ValidateCountry()
+    {
+        RuleFor(c => c.Country)
+            .NotEmpty();
     }
 }

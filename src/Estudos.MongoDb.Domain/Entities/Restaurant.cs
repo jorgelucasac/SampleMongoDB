@@ -34,7 +34,7 @@ public class Restaurant
 
     public virtual bool Validate()
     {
-        ValidationResult =  new RestaurantValidation().Validate(this);
+        ValidationResult = new RestaurantValidation().Validate(this);
 
         ValidateAddress();
 

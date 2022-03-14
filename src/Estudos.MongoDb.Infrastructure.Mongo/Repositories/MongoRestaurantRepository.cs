@@ -16,7 +16,8 @@ public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, 
     protected override string CollectionName => nameof(Restaurant);
     private readonly IMapper _mapper;
 
-    public MongoRestaurantRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) : base(mongoClientDatabase)
+    public MongoRestaurantRepository(IMongoClientDatabase mongoClientDatabase, IMapper mapper) : base(
+        mongoClientDatabase)
     {
         _mapper = mapper;
     }
@@ -44,10 +45,8 @@ public class MongoRestaurantRepository : MongoRepositoryBase<RestaurantSchema>, 
             .Skip(pageFilter.Skip)
             .Limit(pageFilter.ResultCountPerPage);
 
-        await filterQuery.ForEachAsync(schema =>
-         {
-             restaurants.Add(_mapper.Map<Restaurant>(schema));
-         }, cancellationToken);
+        await filterQuery.ForEachAsync(schema => { restaurants.Add(_mapper.Map<Restaurant>(schema)); },
+            cancellationToken);
 
         return PagedResult<Restaurant>.Create(restaurants, pageFilter.Page, pageFilter.ResultCountPerPage,
             pageFilter.PageCount, restaurants.Count, pageFilter.ResultCount);

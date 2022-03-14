@@ -15,7 +15,8 @@ public sealed class FailFastValidationBehavior<TRequest, TOutput> : IPipelineBeh
         _validators = validator;
     }
 
-    public async Task<TOutput> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TOutput> next)
+    public async Task<TOutput> Handle(TRequest request, CancellationToken cancellationToken,
+        RequestHandlerDelegate<TOutput> next)
     {
         var validationResults = ProcessValidations(request);
 
@@ -40,7 +41,8 @@ public sealed class FailFastValidationBehavior<TRequest, TOutput> : IPipelineBeh
         return output;
     }
 
-    private async Task<TOutput> VerifyNextStepAsync(Output output, RequestHandlerDelegate<TOutput> proceedToCommandHandler)
+    private async Task<TOutput> VerifyNextStepAsync(Output output,
+        RequestHandlerDelegate<TOutput> proceedToCommandHandler)
     {
         if (output.IsValid)
             return await proceedToCommandHandler();

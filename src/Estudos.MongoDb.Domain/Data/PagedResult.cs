@@ -6,9 +6,15 @@ public class PagedResult<T> : PagedResultBase
 
     public bool IsEmpty => !Items.Any();
 
-    protected PagedResult() => Items = Array.Empty<T>();
+    protected PagedResult()
+    {
+        Items = Array.Empty<T>();
+    }
 
-    public static PagedResult<T> Empty() => new();
+    public static PagedResult<T> Empty()
+    {
+        return new();
+    }
 
     protected PagedResult(IEnumerable<T> items,
         int currentPage, int resultsPerPage,
