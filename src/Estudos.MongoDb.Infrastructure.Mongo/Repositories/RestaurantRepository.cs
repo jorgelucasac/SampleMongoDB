@@ -8,6 +8,7 @@ using Estudos.MongoDb.Infrastructure.Mongo.Interfaces;
 using Estudos.MongoDb.Infrastructure.Mongo.Schemas;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System.Text.RegularExpressions;
 
 namespace Estudos.MongoDb.Infrastructure.Mongo.Repositories;
@@ -25,7 +26,7 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         _reviewCollection = mongoClientDatabase.Database.GetCollection<ReviewSchema>(nameof(Review));
     }
 
-    public async Task<string> Create(Restaurant restaurant, CancellationToken cancellationToken)
+    public async Task<string> CreateAsync(Restaurant restaurant, CancellationToken cancellationToken)
     {
         var restaurantSchema = _mapper.Map<RestaurantSchema>(restaurant);
         await Collection.InsertOneAsync(restaurantSchema, new InsertOneOptions(), cancellationToken);
@@ -33,29 +34,27 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         return restaurantSchema.Id;
     }
 
-    public async Task<PagedResult<Restaurant>> GetAll(IPagedQuery query, CancellationToken cancellationToken)
+    public async Task<PagedResult<Restaurant>> GetAllAsync(IPagedQuery query, CancellationToken cancellationToken)
     {
         var resultCount = await Collection.CountDocumentsAsync(a => true, cancellationToken: cancellationToken);
         if (resultCount == 0) return PagedResult<Restaurant>.Empty();
 
         var filter = GetFilter(query.Filter);
-
         var pageFilter = PageQueryFilter.Of(query, (int)resultCount);
-        var restaurants = new List<Restaurant>();
 
         var filterQuery = Collection.Find(filter)
             .Sort(GetSort(query.SortOrder, query.OrderBy))
             .Skip(pageFilter.Skip)
             .Limit(pageFilter.ResultCountPerPage);
 
-        await filterQuery.ForEachAsync(schema => { restaurants.Add(_mapper.Map<Restaurant>(schema)); },
-            cancellationToken);
+        var schemas = await filterQuery.ToListAsync(cancellationToken);
+        var restaurants = _mapper.Map<List<Restaurant>>(schemas);
 
         return PagedResult<Restaurant>.Create(restaurants, pageFilter.Page, pageFilter.ResultCountPerPage,
-            pageFilter.PageCount, restaurants.Count, pageFilter.ResultCount);
+        pageFilter.PageCount, restaurants.Count, pageFilter.ResultCount);
     }
 
-    public async Task<Restaurant> GetById(string id, CancellationToken cancellationToken)
+    public async Task<Restaurant> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
         try
         {
@@ -71,7 +70,7 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         }
     }
 
-    public async Task<bool> Exists(string id, CancellationToken cancellationToken)
+    public async Task<bool> ExistsAsync(string id, CancellationToken cancellationToken)
     {
         try
         {
@@ -85,7 +84,7 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         }
     }
 
-    public async Task<bool> Update(Restaurant restaurant, CancellationToken cancellationToken)
+    public async Task<bool> UpdateAsync(Restaurant restaurant, CancellationToken cancellationToken)
     {
         try
         {
@@ -101,7 +100,7 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         }
     }
 
-    public async Task<bool> UpdateCountryAndName(string id, Country? country, string name, CancellationToken cancellationToken)
+    public async Task<bool> UpdateCountryAndNameAsync(string id, Country? country, string name, CancellationToken cancellationToken)
     {
         try
         {
@@ -125,10 +124,91 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         }
     }
 
-    public async Task AddReview(Review review, CancellationToken cancellationToken)
+    public async Task AddReviewAsync(Review review, CancellationToken cancellationToken)
     {
         var reviewSchema = _mapper.Map<ReviewSchema>(review);
         await _reviewCollection.InsertOneAsync(reviewSchema, new InsertOneOptions(), cancellationToken);
+    }
+
+    public async Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsAsync(int limit, CancellationToken cancellationToken)
+    {
+        var result = new Dictionary<Restaurant, double>();
+
+        var topReviews = await _reviewCollection.Aggregate()
+            .Group(x => x.RestaurantId, g => new { RestaurantId = g.Key, AverageStars = g.Average(a => a.Stars) })
+            .SortByDescending(x => x.AverageStars)
+            .Limit(limit)
+            .ToListAsync();
+
+        foreach (var topReview in topReviews)
+        {
+            var restaurant = await GetByIdAsync(topReview.RestaurantId, cancellationToken);
+            var reviewsSchema = await _reviewCollection
+                                .Find(a => a.RestaurantId == topReview.RestaurantId)
+                                .ToListAsync();
+
+            var reviews = _mapper.Map<List<Review>>(reviewsSchema);
+            restaurant.AddReviews(reviews);
+            result.Add(restaurant, topReview.AverageStars);
+        }
+
+        return result;
+    }
+
+    public async Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsWhithLookupAsync(int limit, CancellationToken cancellationToken)
+    {
+        var result = new Dictionary<Restaurant, double>();
+
+        var topReviews = await _reviewCollection
+           .Aggregate()
+           .Group(x => x.RestaurantId, g => new { RestaurantId = g.Key, AverageStars = g.Average(a => a.Stars) })
+           .SortByDescending(x => x.AverageStars)
+           .Limit(limit)
+           .Lookup<RestaurantSchema, RestaurantReviewSchema>(nameof(Restaurant), "RestaurantId", "Id", "Restaurants")
+           .Lookup<ReviewSchema, RestaurantReviewSchema>(nameof(Review), "Id", "RestaurantId", "Reviews")
+           .ToListAsync(cancellationToken);
+
+        foreach (var topReview in topReviews)
+        {
+            if (!topReview.Restaurants.Any())
+                continue;
+
+            var restaurant = _mapper.Map<Restaurant>(topReview.Restaurants);
+            var reviews = _mapper.Map<List<Review>>(topReview.Reviews);
+
+            restaurant.AddReviews(reviews);
+            result.Add(restaurant, topReview.AverageStars);
+        }
+
+        return result;
+    }
+
+    public (long restaurantResult, long reviewResult) Delete(string restaurantId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var reviewResult = _reviewCollection.DeleteMany(x => x.RestaurantId == restaurantId, cancellationToken);
+            var restaurantResult = Collection.DeleteOne(x => x.Id == restaurantId, cancellationToken);
+
+            return (restaurantResult.DeletedCount, reviewResult.DeletedCount);
+        }
+        catch (Exception e)
+        {
+        }
+        return default;
+    }
+
+    public async Task<IEnumerable<Restaurant>> SearchWithIndex(string search)
+    {
+        var filter = Builders<RestaurantSchema>.Filter.Text(search);
+
+        var schemas = await Collection
+             .AsQueryable()
+             .Where(_ => filter.Inject())
+             .ToListAsync();
+        var restaurants = _mapper.Map<List<Restaurant>>(schemas);
+
+        return restaurants;
     }
 
     private FilterDefinition<RestaurantSchema> GetFilter(string filter)

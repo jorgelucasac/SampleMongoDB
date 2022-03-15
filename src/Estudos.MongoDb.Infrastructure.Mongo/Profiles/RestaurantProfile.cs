@@ -21,5 +21,8 @@ public class RestaurantProfile : Profile
                     src.Address.State, src.Address.ZipCode)));
 
         CreateMap<Review, ReviewSchema>();
+
+        CreateMap<ReviewSchema, Review>()
+            .ConstructUsing(x => new Review(x.RestaurantId, x.Stars, x.RestaurantId));
     }
 }
