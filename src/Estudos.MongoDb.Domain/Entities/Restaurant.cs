@@ -11,6 +11,7 @@ public class Restaurant
     {
         Name = name;
         Country = country;
+        Reviews = new List<Review>();
     }
 
     public Restaurant(string id, string name, Country country)
@@ -18,18 +19,25 @@ public class Restaurant
         Id = id;
         Name = name;
         Country = country;
+        Reviews = new List<Review>();
     }
 
     public string Id { get; private set; }
     public string Name { get; private set; }
     public Country Country { get; private set; }
     public Address Address { get; private set; }
+    public List<Review> Reviews { get; private set; }
 
     public ValidationResult ValidationResult { get; private set; }
 
     public void SetAddress(Address address)
     {
         Address = address;
+    }
+
+    public void AddReviews(List<Review> reviews)
+    {
+        Reviews.AddRange(reviews);
     }
 
     public virtual bool Validate()

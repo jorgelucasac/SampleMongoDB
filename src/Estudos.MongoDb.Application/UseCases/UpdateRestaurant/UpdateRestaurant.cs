@@ -18,11 +18,11 @@ public class UpdateRestaurant : BaseUseCase, IUpdateRestaurantUseCase
 
     public async Task<Output> Handle(UpdateRestaurantInput request, CancellationToken cancellationToken)
     {
-        var notExists = !await _repository.Exists(request.Id, cancellationToken);
+        var notExists = !await _repository.ExistsAsync(request.Id, cancellationToken);
         if (notExists) NotFound();
 
         var restaurant = _mapper.Map<Restaurant>(request);
-        await _repository.Update(restaurant, cancellationToken);
+        await _repository.UpdateAsync(restaurant, cancellationToken);
 
         return Success();
     }

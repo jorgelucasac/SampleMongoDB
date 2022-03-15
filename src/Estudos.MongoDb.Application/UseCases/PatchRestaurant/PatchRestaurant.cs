@@ -17,7 +17,7 @@ public class PatchRestaurant : BaseUseCase, IPatchRestaurantUseCase
 
     public async Task<Output> Handle(PatchRestaurantInput request, CancellationToken cancellationToken)
     {
-        var notExists = !await _repository.Exists(request.Id, cancellationToken);
+        var notExists = !await _repository.ExistsAsync(request.Id, cancellationToken);
         if (notExists) NotFound();
 
         await _repository.UpdateCountryAndName(request.Id, request.GetCountryEnum(), request.Name, cancellationToken);

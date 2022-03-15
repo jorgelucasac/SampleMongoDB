@@ -17,7 +17,7 @@ public class GetRestaurantById : BaseUseCase, IGetRestaurantByIdUseCase
 
     public async Task<Output> Handle(GetRestaurantByIdInput request, CancellationToken cancellationToken)
     {
-        var restaurant = await _repository.GetById(request.Id, cancellationToken);
+        var restaurant = await _repository.GetByIdAsync(request.Id, cancellationToken);
 
         if (restaurant is null)
             return NotFound();

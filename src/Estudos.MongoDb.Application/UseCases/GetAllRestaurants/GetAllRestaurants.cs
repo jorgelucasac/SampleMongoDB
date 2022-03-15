@@ -19,7 +19,7 @@ public class GetAllRestaurants : BaseUseCase, IGetAllRestaurantsUseCase
 
     public async Task<Output> Handle(GetAllRestaurantsInput request, CancellationToken cancellationToken)
     {
-        var restaurants = await _repository.GetAll(request, cancellationToken);
+        var restaurants = await _repository.GetAllAsync(request, cancellationToken);
 
         return Success(GetPageListOutput(restaurants));
     }

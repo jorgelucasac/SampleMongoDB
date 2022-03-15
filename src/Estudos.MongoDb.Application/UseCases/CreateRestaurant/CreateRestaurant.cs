@@ -19,7 +19,7 @@ public class CreateRestaurant : BaseUseCase, ICreateRestaurantUseCase
     public async Task<Output> Handle(CreateRestaurantInput request, CancellationToken cancellationToken)
     {
         var restaurant = _mapper.Map<Restaurant>(request);
-        var id = await _repository.Create(restaurant, cancellationToken);
+        var id = await _repository.CreateAsync(restaurant, cancellationToken);
 
         return RestaurantcreatedSuccessfully(restaurant, id);
     }
