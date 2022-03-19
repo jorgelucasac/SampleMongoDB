@@ -130,7 +130,7 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         await _reviewCollection.InsertOneAsync(reviewSchema, new InsertOneOptions(), cancellationToken);
     }
 
-    public async Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsAsync(int limit, CancellationToken cancellationToken)
+    public async Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsWhithoutLookupAsync(int limit, CancellationToken cancellationToken)
     {
         var result = new Dictionary<Restaurant, double>();
 
@@ -155,7 +155,7 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         return result;
     }
 
-    public async Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsWhithLookupAsync(int limit, CancellationToken cancellationToken)
+    public async Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsAsync(int limit, CancellationToken cancellationToken)
     {
         var result = new Dictionary<Restaurant, double>();
 
@@ -173,7 +173,7 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
             if (!topReview.Restaurants.Any())
                 continue;
 
-            var restaurant = _mapper.Map<Restaurant>(topReview.Restaurants);
+            var restaurant = _mapper.Map<Restaurant>(topReview.Restaurants.First());
             var reviews = _mapper.Map<List<Review>>(topReview.Reviews);
 
             restaurant.AddReviews(reviews);
@@ -198,17 +198,20 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         return default;
     }
 
-    public async Task<IEnumerable<Restaurant>> SearchWithIndex(string search)
+    public async Task<IEnumerable<Restaurant>> SearchWithIndex(string search, CancellationToken cancellationToken)
     {
         var filter = Builders<RestaurantSchema>.Filter.Text(search);
 
         var schemas = await Collection
              .AsQueryable()
              .Where(_ => filter.Inject())
-             .ToListAsync();
+             .ToListAsync(cancellationToken);
+
         var restaurants = _mapper.Map<List<Restaurant>>(schemas);
 
         return restaurants;
+        //db.Restaurant.createIndex({ "$**": "text"},{ default_language: "portuguese"})
+        //db.Restaurant.createIndex({ Name: "text"},{ default_language: "portuguese"})
     }
 
     private FilterDefinition<RestaurantSchema> GetFilter(string filter)

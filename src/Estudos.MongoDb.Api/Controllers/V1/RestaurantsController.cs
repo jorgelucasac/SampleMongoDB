@@ -5,6 +5,7 @@ using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.DeleteRestautant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
+using Estudos.MongoDb.Application.UseCases.GetTopRatedRestaurants;
 using Estudos.MongoDb.Application.UseCases.PatchRestaurant;
 using Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 using Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
@@ -113,6 +114,19 @@ public class RestaurantsController : MainController
         input.SetRestaurantId(id);
 
         var output = await _mediator.Send(input, cancellationToken);
-        return ResponseSubPost(output);
+        return ResponsePost(output);
+    }
+
+    [HttpGet("top-rated")]
+    [ProducesResponseType(typeof(GetAllRestaurantsOutput), StatusCodes.Status200OK)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
+    public async Task<IActionResult> GetTopRatedAsync([FromQuery] int limit, CancellationToken cancellationToken)
+    {
+        var input = new GetTopRatedRestaurantsInput(limit);
+        var output = await _mediator.Send(input, cancellationToken);
+
+        return ResponseGet(output);
     }
 }

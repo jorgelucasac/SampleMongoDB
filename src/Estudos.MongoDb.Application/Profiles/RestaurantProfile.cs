@@ -2,6 +2,7 @@
 using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
+using Estudos.MongoDb.Application.UseCases.GetTopRatedRestaurants;
 using Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 using Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 using Estudos.MongoDb.Domain.Entities;
@@ -45,5 +46,10 @@ public class RestaurantProfile : Profile
             .ConstructUsing(src => new Review(src.RestaurantId, src.Stars, src.Comment));
 
         CreateMap<Review, PostReviewRestaurantOutput>();
+
+        CreateMap<KeyValuePair<Restaurant, double>, GetTopRatedRestaurantsOutput>()
+            .ForMember(dest => dest.Stars, opt => opt.MapFrom(src => src.Value))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Key.Name))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Key.Id));
     }
 }
