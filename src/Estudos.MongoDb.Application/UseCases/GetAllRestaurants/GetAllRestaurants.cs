@@ -6,7 +6,7 @@ using Estudos.MongoDb.Domain.Entities;
 
 namespace Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 
-public class GetAllRestaurants : BaseUseCase, IGetAllRestaurantsUseCase
+public class GetAllRestaurants : BaseUseCase<GetAllRestaurantsInput>
 {
     private readonly IRestaurantRepository _repository;
     private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ public class GetAllRestaurants : BaseUseCase, IGetAllRestaurantsUseCase
         _mapper = mapper;
     }
 
-    public async Task<Output> Handle(GetAllRestaurantsInput request, CancellationToken cancellationToken)
+    public override async Task<Output> Handle(GetAllRestaurantsInput request, CancellationToken cancellationToken)
     {
         var restaurants = await _repository.GetAllAsync(request, cancellationToken);
 

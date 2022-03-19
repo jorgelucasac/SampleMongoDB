@@ -5,7 +5,7 @@ using Estudos.MongoDb.Domain.Entities;
 
 namespace Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 
-public class CreateRestaurant : BaseUseCase, ICreateRestaurantUseCase
+public class CreateRestaurant : BaseUseCase<CreateRestaurantInput>
 {
     private readonly IMapper _mapper;
     private readonly IRestaurantRepository _repository;
@@ -16,7 +16,7 @@ public class CreateRestaurant : BaseUseCase, ICreateRestaurantUseCase
         _repository = repository;
     }
 
-    public async Task<Output> Handle(CreateRestaurantInput request, CancellationToken cancellationToken)
+    public override async Task<Output> Handle(CreateRestaurantInput request, CancellationToken cancellationToken)
     {
         var restaurant = _mapper.Map<Restaurant>(request);
         var id = await _repository.CreateAsync(restaurant, cancellationToken);

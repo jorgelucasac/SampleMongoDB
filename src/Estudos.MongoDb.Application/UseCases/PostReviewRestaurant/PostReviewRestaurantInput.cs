@@ -1,9 +1,8 @@
 ﻿using Estudos.MongoDb.Application.UseCases.Shared;
-using MediatR;
 
 namespace Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 
-public class PostReviewRestaurantInput : IRequest<Output>
+public class PostReviewRestaurantInput : BaseInput
 {
     public PostReviewRestaurantInput(int stars, string comment)
     {

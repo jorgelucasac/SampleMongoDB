@@ -1,9 +1,8 @@
 ﻿using Estudos.MongoDb.Application.UseCases.Shared;
-using MediatR;
 
 namespace Estudos.MongoDb.Application.UseCases.CreateRestaurant;
 
-public class CreateRestaurantInput : IRequest<Output>
+public class CreateRestaurantInput : BaseInput
 {
     public string Name { get; set; } = string.Empty;
     public int Country { get; set; }

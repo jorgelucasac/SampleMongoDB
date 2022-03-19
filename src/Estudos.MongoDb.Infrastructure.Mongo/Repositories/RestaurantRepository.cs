@@ -138,14 +138,14 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
             .Group(x => x.RestaurantId, g => new { RestaurantId = g.Key, AverageStars = g.Average(a => a.Stars) })
             .SortByDescending(x => x.AverageStars)
             .Limit(limit)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         foreach (var topReview in topReviews)
         {
             var restaurant = await GetByIdAsync(topReview.RestaurantId, cancellationToken);
             var reviewsSchema = await _reviewCollection
                                 .Find(a => a.RestaurantId == topReview.RestaurantId)
-                                .ToListAsync();
+                                .ToListAsync(cancellationToken);
 
             var reviews = _mapper.Map<List<Review>>(reviewsSchema);
             restaurant.AddReviews(reviews);
@@ -183,14 +183,14 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         return result;
     }
 
-    public (long restaurantResult, long reviewResult) Delete(string restaurantId, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(string id, CancellationToken cancellationToken)
     {
         try
         {
-            var reviewResult = _reviewCollection.DeleteMany(x => x.RestaurantId == restaurantId, cancellationToken);
-            var restaurantResult = Collection.DeleteOne(x => x.Id == restaurantId, cancellationToken);
+            var reviewResult = await _reviewCollection.DeleteManyAsync(x => x.RestaurantId == id, cancellationToken);
+            var restaurantResult = await Collection.DeleteOneAsync(x => x.Id == id, cancellationToken);
 
-            return (restaurantResult.DeletedCount, reviewResult.DeletedCount);
+            return (restaurantResult.DeletedCount > 0 && reviewResult.DeletedCount > 0);
         }
         catch (Exception e)
         {

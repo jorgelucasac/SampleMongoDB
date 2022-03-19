@@ -2,6 +2,7 @@ using AutoMapper;
 using Estudos.MongoDb.Api.Filters;
 using Estudos.MongoDb.Api.Transports.Requests;
 using Estudos.MongoDb.Application.UseCases.CreateRestaurant;
+using Estudos.MongoDb.Application.UseCases.DeleteRestautant;
 using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 using Estudos.MongoDb.Application.UseCases.PatchRestaurant;
@@ -89,7 +90,19 @@ public class RestaurantsController : MainController
         return ResponsePutPatchDelete(output);
     }
 
-    [HttpPost("{id}/review")]
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseNotFound]
+    [ProducesResponseBadRequest]
+    [ProducesResponseInternalServerError]
+    public async Task<IActionResult> DeleteAsync(string id, CancellationToken cancellationToken)
+    {
+        var input = new DeleteRestautantInput(id);
+        var output = await _mediator.Send(input, cancellationToken);
+        return ResponsePutPatchDelete(output);
+    }
+
+    [HttpPost("{id}/reviews")]
     [ProducesResponseType(typeof(PostReviewRestaurantOutput), StatusCodes.Status201Created)]
     [ProducesResponseNotFound]
     [ProducesResponseBadRequest]

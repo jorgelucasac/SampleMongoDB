@@ -1,6 +1,6 @@
 ﻿namespace Estudos.MongoDb.Application.UseCases.Shared;
 
-public abstract class BaseUseCase
+public abstract class BaseUseCase<T> : IBaseUseCase<T> where T : BaseInput
 {
     protected Output Output { get; set; }
 
@@ -9,15 +9,17 @@ public abstract class BaseUseCase
         Output = new Output();
     }
 
-    protected Output NotFound()
+    public Output NotFound()
     {
         Output.SetNotFound();
         return Output;
     }
 
-    protected Output Success(object result = null)
+    public Output Success(object result = null)
     {
         Output.AddResult(result);
         return Output;
     }
+
+    public abstract Task<Output> Handle(T request, CancellationToken cancellationToken);
 }

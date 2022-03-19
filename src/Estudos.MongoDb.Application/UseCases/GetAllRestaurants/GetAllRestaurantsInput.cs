@@ -1,11 +1,10 @@
 ﻿using Estudos.MongoDb.Application.UseCases.Shared;
 using Estudos.MongoDb.Domain.Data.Interfaces;
 using Estudos.MongoDb.Domain.Enums;
-using MediatR;
 
 namespace Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 
-public class GetAllRestaurantsInput : IRequest<Output>, IPagedQuery
+public class GetAllRestaurantsInput : BaseInput, IPagedQuery
 {
     public GetAllRestaurantsInput(int page, int results, string orderBy, string filter, string sortOrder)
     {

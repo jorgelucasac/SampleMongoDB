@@ -1,10 +1,9 @@
 ﻿using Estudos.MongoDb.Application.UseCases.Shared;
 using Estudos.MongoDb.Domain.Enums;
-using MediatR;
 
 namespace Estudos.MongoDb.Application.UseCases.PatchRestaurant;
 
-public class PatchRestaurantInput : IRequest<Output>
+public class PatchRestaurantInput : BaseInput
 {
     public PatchRestaurantInput(string name, int? country)
     {

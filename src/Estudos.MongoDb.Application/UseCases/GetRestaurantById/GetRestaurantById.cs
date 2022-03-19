@@ -4,7 +4,7 @@ using Estudos.MongoDb.Domain.Data.Interfaces;
 
 namespace Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 
-public class GetRestaurantById : BaseUseCase, IGetRestaurantByIdUseCase
+public class GetRestaurantById : BaseUseCase<GetRestaurantByIdInput>
 {
     private readonly IRestaurantRepository _repository;
     private readonly IMapper _mapper;
@@ -15,7 +15,7 @@ public class GetRestaurantById : BaseUseCase, IGetRestaurantByIdUseCase
         _mapper = mapper;
     }
 
-    public async Task<Output> Handle(GetRestaurantByIdInput request, CancellationToken cancellationToken)
+    public override async Task<Output> Handle(GetRestaurantByIdInput request, CancellationToken cancellationToken)
     {
         var restaurant = await _repository.GetByIdAsync(request.Id, cancellationToken);
 

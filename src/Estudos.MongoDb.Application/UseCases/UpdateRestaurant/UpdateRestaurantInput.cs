@@ -1,9 +1,8 @@
 ﻿using Estudos.MongoDb.Application.UseCases.Shared;
-using MediatR;
 
 namespace Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 
-public class UpdateRestaurantInput : IRequest<Output>
+public class UpdateRestaurantInput : BaseInput
 {
     public UpdateRestaurantInput(string name, int country, string publicPlace, string number, string city, string state, string zipCode)
     {

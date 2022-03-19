@@ -5,7 +5,7 @@ using Estudos.MongoDb.Domain.ValueObjects;
 
 namespace Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 
-public class PostReviewRestaurant : BaseUseCase, IPostReviewRestaurantUseCase
+public class PostReviewRestaurant : BaseUseCase<PostReviewRestaurantInput>
 {
     private readonly IRestaurantRepository _restaurantRepository;
     private readonly IMapper _mapper;
@@ -16,10 +16,10 @@ public class PostReviewRestaurant : BaseUseCase, IPostReviewRestaurantUseCase
         _mapper = mapper;
     }
 
-    public async Task<Output> Handle(PostReviewRestaurantInput request, CancellationToken cancellationToken)
+    public override async Task<Output> Handle(PostReviewRestaurantInput request, CancellationToken cancellationToken)
     {
         var review = _mapper.Map<Review>(request);
-        await _restaurantRepository.AddReview(review, cancellationToken);
+        await _restaurantRepository.AddReviewAsync(review, cancellationToken);
 
         var output = _mapper.Map<PostReviewRestaurantOutput>(review);
         return Success(output);

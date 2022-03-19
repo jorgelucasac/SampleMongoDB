@@ -13,4 +13,6 @@ public interface IRepository
     Task<bool> ExistsAsync(string id, CancellationToken cancellationToken);
 
     Task<bool> UpdateAsync(Restaurant restaurant, CancellationToken cancellationToken);
+
+    Task<bool> DeleteAsync(string id, CancellationToken cancellationToken);
 }
