@@ -10,5 +10,7 @@ public interface IRestaurantRepository : IRepository
 
     Task AddReviewAsync(Review review, CancellationToken cancellationToken);
 
+    Task<PagedResult<Review>> GetReviewsAsync(string id, IPagedQuery query, CancellationToken cancellationToken);
+
     Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsAsync(int limit, CancellationToken cancellationToken);
 }

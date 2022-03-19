@@ -130,6 +130,26 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
         await _reviewCollection.InsertOneAsync(reviewSchema, new InsertOneOptions(), cancellationToken);
     }
 
+    public async Task<PagedResult<Review>> GetReviewsAsync(string id, IPagedQuery query, CancellationToken cancellationToken)
+    {
+        var resultCount = await _reviewCollection.CountDocumentsAsync(a => a.RestaurantId == id, cancellationToken: cancellationToken);
+        if (resultCount == 0) return PagedResult<Review>.Empty();
+
+        var pageFilter = PageQueryFilter.Of(query, (int)resultCount);
+        var sort = Builders<ReviewSchema>.Sort.Descending(a => a.Stars);
+
+        var filterQuery = _reviewCollection.Find(x => x.RestaurantId == id)
+            .Sort(sort)
+            .Skip(pageFilter.Skip)
+            .Limit(pageFilter.ResultCountPerPage);
+
+        var schemas = await filterQuery.ToListAsync(cancellationToken);
+        var reviews = _mapper.Map<List<Review>>(schemas);
+
+        return PagedResult<Review>.Create(reviews, pageFilter.Page, pageFilter.ResultCountPerPage,
+        pageFilter.PageCount, reviews.Count, pageFilter.ResultCount);
+    }
+
     public async Task<Dictionary<Restaurant, double>> GetTopRatedRestaurantsWhithoutLookupAsync(int limit, CancellationToken cancellationToken)
     {
         var result = new Dictionary<Restaurant, double>();

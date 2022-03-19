@@ -7,6 +7,7 @@ using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 using Estudos.MongoDb.Application.UseCases.GetTopRatedRestaurants;
 using Estudos.MongoDb.Application.UseCases.PatchRestaurant;
+using Estudos.MongoDb.Application.UseCases.Shared;
 using Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ public class RestaurantsController : MainController
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(GetAllRestaurantsOutput), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PageListOutput<GetAllRestaurantsOutput>), StatusCodes.Status200OK)]
     [ProducesResponseNotFound]
     [ProducesResponseBadRequest]
     [ProducesResponseInternalServerError]
@@ -103,7 +104,7 @@ public class RestaurantsController : MainController
     }
 
     [HttpGet("top-rated")]
-    [ProducesResponseType(typeof(GetAllRestaurantsOutput), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<GetTopRatedRestaurantsOutput>), StatusCodes.Status200OK)]
     [ProducesResponseNotFound]
     [ProducesResponseBadRequest]
     [ProducesResponseInternalServerError]
