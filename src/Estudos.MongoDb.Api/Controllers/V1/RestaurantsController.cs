@@ -7,7 +7,6 @@ using Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 using Estudos.MongoDb.Application.UseCases.GetRestaurantById;
 using Estudos.MongoDb.Application.UseCases.GetTopRatedRestaurants;
 using Estudos.MongoDb.Application.UseCases.PatchRestaurant;
-using Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 using Estudos.MongoDb.Application.UseCases.UpdateRestaurant;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -103,26 +102,12 @@ public class RestaurantsController : MainController
         return ResponsePutPatchDelete(output);
     }
 
-    [HttpPost("{id}/reviews")]
-    [ProducesResponseType(typeof(PostReviewRestaurantOutput), StatusCodes.Status201Created)]
-    [ProducesResponseNotFound]
-    [ProducesResponseBadRequest]
-    [ProducesResponseInternalServerError]
-    public async Task<IActionResult> PostReviewAsync(string id, CreateReviewRequest request, CancellationToken cancellationToken)
-    {
-        var input = _mapper.Map<PostReviewRestaurantInput>(request);
-        input.SetRestaurantId(id);
-
-        var output = await _mediator.Send(input, cancellationToken);
-        return ResponsePost(output);
-    }
-
     [HttpGet("top-rated")]
     [ProducesResponseType(typeof(GetAllRestaurantsOutput), StatusCodes.Status200OK)]
     [ProducesResponseNotFound]
     [ProducesResponseBadRequest]
     [ProducesResponseInternalServerError]
-    public async Task<IActionResult> GetTopRatedAsync([FromQuery] int limit, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTopRatedAsync([FromQuery] int? limit, CancellationToken cancellationToken)
     {
         var input = new GetTopRatedRestaurantsInput(limit);
         var output = await _mediator.Send(input, cancellationToken);

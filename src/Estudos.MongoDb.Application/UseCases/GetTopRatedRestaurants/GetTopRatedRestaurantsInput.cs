@@ -4,10 +4,10 @@ namespace Estudos.MongoDb.Application.UseCases.GetTopRatedRestaurants;
 
 public class GetTopRatedRestaurantsInput : BaseInput
 {
-    public int Limit { get; }
+    public int Limit { get; } = 10;
 
-    public GetTopRatedRestaurantsInput(int limit = 10)
+    public GetTopRatedRestaurantsInput(int? limit = null)
     {
-        Limit = limit;
+        Limit = limit ?? Limit;
     }
 }
