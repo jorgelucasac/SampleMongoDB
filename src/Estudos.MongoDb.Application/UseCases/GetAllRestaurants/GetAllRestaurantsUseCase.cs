@@ -6,12 +6,12 @@ using Estudos.MongoDb.Domain.Entities;
 
 namespace Estudos.MongoDb.Application.UseCases.GetAllRestaurants;
 
-public class GetAllRestaurants : BaseUseCase<GetAllRestaurantsInput>
+public class GetAllRestaurantsUseCase : BaseUseCase<GetAllRestaurantsInput>
 {
     private readonly IRestaurantRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetAllRestaurants(IRestaurantRepository repository, IMapper mapper)
+    public GetAllRestaurantsUseCase(IRestaurantRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

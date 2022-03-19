@@ -5,12 +5,12 @@ using Estudos.MongoDb.Domain.ValueObjects;
 
 namespace Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 
-public class PostReviewRestaurant : BaseUseCase<PostReviewRestaurantInput>
+public class PostReviewRestaurantUseCase : BaseUseCase<PostReviewRestaurantInput>
 {
     private readonly IRestaurantRepository _restaurantRepository;
     private readonly IMapper _mapper;
 
-    public PostReviewRestaurant(IRestaurantRepository restaurantRepository, IMapper mapper)
+    public PostReviewRestaurantUseCase(IRestaurantRepository restaurantRepository, IMapper mapper)
     {
         _restaurantRepository = restaurantRepository;
         _mapper = mapper;

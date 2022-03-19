@@ -3,11 +3,11 @@ using Estudos.MongoDb.Domain.Data.Interfaces;
 
 namespace Estudos.MongoDb.Application.UseCases.PatchRestaurant;
 
-public class PatchRestaurant : BaseUseCase<PatchRestaurantInput>
+public class PatchRestaurantUseCase : BaseUseCase<PatchRestaurantInput>
 {
     private readonly IRestaurantRepository _repository;
 
-    public PatchRestaurant(IRestaurantRepository repository)
+    public PatchRestaurantUseCase(IRestaurantRepository repository)
     {
         _repository = repository;
     }
