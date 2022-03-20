@@ -27,6 +27,7 @@ public static class Startup
         var apiVersionDescriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
         app.UseSwaggerConfiguration(apiVersionDescriptionProvider);
 
+        app.UseMiddleware<ErrorHandlerMiddleware>();
         app.UseHttpsRedirection();
         app.UseAuthorization();
 
