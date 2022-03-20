@@ -1,4 +1,4 @@
-﻿using Estudos.MongoDb.Api.Extensions;
+﻿using Estudos.MongoDb.Api.Extensions.Outputs;
 using Estudos.MongoDb.Application.UseCases.Shared;
 using Microsoft.AspNetCore.Mvc;
 

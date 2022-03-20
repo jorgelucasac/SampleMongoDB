@@ -1,4 +1,5 @@
 using Estudos.MongoDb.Api.Extensions;
+using Estudos.MongoDb.Api.Extensions.Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureServices(builder.Configuration);

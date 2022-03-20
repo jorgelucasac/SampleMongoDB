@@ -1,6 +1,6 @@
 ﻿using Estudos.MongoDb.Api.Profiles;
 
-namespace Estudos.MongoDb.Api.Extensions;
+namespace Estudos.MongoDb.Api.Extensions.AutoMapper;
 
 public static class AutoMapperExtension
 {

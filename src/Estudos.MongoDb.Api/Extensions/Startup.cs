@@ -1,4 +1,8 @@
-﻿using Estudos.MongoDb.Application.Extensions;
+﻿using Estudos.MongoDb.Api.Extensions.AutoMapper;
+using Estudos.MongoDb.Api.Extensions.Middlewares;
+using Estudos.MongoDb.Api.Extensions.Swagger;
+using Estudos.MongoDb.Api.Extensions.Version;
+using Estudos.MongoDb.Application.Extensions;
 using Estudos.MongoDb.Infrastructure.Mongo.Extensions;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 

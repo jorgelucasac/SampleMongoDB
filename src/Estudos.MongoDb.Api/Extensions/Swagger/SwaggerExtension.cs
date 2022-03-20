@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 
-namespace Estudos.MongoDb.Api.Extensions;
+namespace Estudos.MongoDb.Api.Extensions.Swagger;
 
 public static class SwaggerExtension
 {
@@ -26,8 +26,7 @@ public static class SwaggerExtension
         });
     }
 
-    public static void UseSwaggerConfiguration(this IApplicationBuilder app,
-        IApiVersionDescriptionProvider provider)
+    public static void UseSwaggerConfiguration(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
     {
         app.UseSwagger();
         app.UseSwaggerUI(c =>
@@ -39,7 +38,7 @@ public static class SwaggerExtension
 
                 c.SwaggerEndpoint(
                     $"/swagger/{description.GroupName}/swagger.json",
-                    $"Api MongoDb - {description.GroupName.ToUpperInvariant()} {notice}");
+                    $"Api Restaurants - {description.GroupName.ToUpperInvariant()} {notice}");
             }
         });
     }

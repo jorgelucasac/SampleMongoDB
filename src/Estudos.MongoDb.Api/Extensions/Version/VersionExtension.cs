@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Estudos.MongoDb.Api.Extensions;
+namespace Estudos.MongoDb.Api.Extensions.Version;
 
 public static class VersionExtension
 {

@@ -1,7 +1,7 @@
 ﻿using Estudos.MongoDb.Api.Transports.Responses;
 using Estudos.MongoDb.Application.UseCases.Shared;
 
-namespace Estudos.MongoDb.Api.Extensions;
+namespace Estudos.MongoDb.Api.Extensions.Outputs;
 
 public static class OutputExtension
 {

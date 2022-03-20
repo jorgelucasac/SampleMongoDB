@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Estudos.MongoDb.Api.Extensions;
+namespace Estudos.MongoDb.Api.Extensions.Swagger;
 
 public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
 {
@@ -26,8 +26,8 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
     {
         var info = new OpenApiInfo
         {
-            Title = "MongoDb API",
-            Description = "Api de estudos MongoDb",
+            Title = "Restaurants API",
+            Description = "Api de estudos MongoDb. <br> Permite realizar um crud de restaurantes e avalia-los",
             Contact = new OpenApiContact
             {
                 Name = "Jorge Lucas",
