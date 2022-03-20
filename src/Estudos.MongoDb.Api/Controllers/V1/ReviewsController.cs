@@ -2,6 +2,7 @@
 using Estudos.MongoDb.Api.Filters;
 using Estudos.MongoDb.Api.Transports.Requests;
 using Estudos.MongoDb.Application.UseCases.GetReviewsByRestaurantId;
+using Estudos.MongoDb.Application.UseCases.GetTopRatedRestaurants;
 using Estudos.MongoDb.Application.UseCases.PostReviewRestaurant;
 using Estudos.MongoDb.Application.UseCases.Shared;
 using MediatR;
@@ -9,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Estudos.MongoDb.Api.Controllers.V1
 {
-    [Route("api/v{version:apiVersion}/restaurants/{id}/[controller]")]
+    [Route("api/v{version:apiVersion}/restaurants")]
     public class ReviewsController : MainController
     {
         private readonly IMediator _mediator;
@@ -21,7 +22,20 @@ namespace Estudos.MongoDb.Api.Controllers.V1
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("top-rated")]
+        [ProducesResponseType(typeof(IEnumerable<GetTopRatedRestaurantsOutput>), StatusCodes.Status200OK)]
+        [ProducesResponseNotFound]
+        [ProducesResponseBadRequest]
+        [ProducesResponseInternalServerError]
+        public async Task<IActionResult> GetTopRatedAsync([FromQuery] int? limit, CancellationToken cancellationToken)
+        {
+            var input = new GetTopRatedRestaurantsInput(limit);
+            var output = await _mediator.Send(input, cancellationToken);
+
+            return ResponseGet(output);
+        }
+
+        [HttpGet("{id}/reviews")]
         [ProducesResponseType(typeof(PageListOutput<GetReviewsByRestaurantIdOutput>), StatusCodes.Status201Created)]
         [ProducesResponseNotFound]
         [ProducesResponseBadRequest]
@@ -33,7 +47,7 @@ namespace Estudos.MongoDb.Api.Controllers.V1
             return ResponsePost(output);
         }
 
-        [HttpPost]
+        [HttpPost("{id}/reviews")]
         [ProducesResponseType(typeof(PostReviewRestaurantOutput), StatusCodes.Status201Created)]
         [ProducesResponseNotFound]
         [ProducesResponseBadRequest]

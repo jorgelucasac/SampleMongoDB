@@ -4,7 +4,7 @@ using Estudos.MongoDb.Domain.ValueObjects;
 
 namespace Estudos.MongoDb.Domain.Data.Interfaces;
 
-public interface IRestaurantRepository : IRepository
+public interface IRestaurantRepository : IWriteRepository<Restaurant>, IReadRepository<Restaurant>
 {
     Task<bool> UpdateCountryAndNameAsync(string id, Country? country, string name, CancellationToken cancellationToken);
 

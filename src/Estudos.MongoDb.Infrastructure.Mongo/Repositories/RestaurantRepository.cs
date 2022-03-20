@@ -56,72 +56,56 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
 
     public async Task<Restaurant> GetByIdAsync(string id, CancellationToken cancellationToken)
     {
-        try
-        {
-            var restaurantSchema = await Collection
-                .Find(a => a.Id == id)
-                .FirstOrDefaultAsync(cancellationToken);
-
-            return _mapper.Map<Restaurant>(restaurantSchema);
-        }
-        catch (Exception e)
-        {
+        if (IsNotObjectId(id))
             return null;
-        }
+
+        var restaurantSchema = await Collection
+            .Find(a => a.Id == id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return _mapper.Map<Restaurant>(restaurantSchema);
     }
 
     public async Task<bool> ExistsAsync(string id, CancellationToken cancellationToken)
     {
-        try
-        {
-            return await Collection
-                  .Find(a => a.Id == id)
-                  .AnyAsync(cancellationToken);
-        }
-        catch (Exception e)
-        {
+        if (IsNotObjectId(id))
             return false;
-        }
+
+        return await Collection
+              .Find(a => a.Id == id)
+              .AnyAsync(cancellationToken);
     }
 
     public async Task<bool> UpdateAsync(Restaurant restaurant, CancellationToken cancellationToken)
     {
-        try
-        {
-            var restaurantSchema = _mapper.Map<RestaurantSchema>(restaurant);
-            var result = await Collection
-                .ReplaceOneAsync(x => x.Id == restaurantSchema.Id, restaurantSchema, cancellationToken: cancellationToken);
-
-            return result.ModifiedCount > 0;
-        }
-        catch (Exception e)
-        {
+        if (IsNotObjectId(restaurant.Id))
             return false;
-        }
+
+        var restaurantSchema = _mapper.Map<RestaurantSchema>(restaurant);
+        var result = await Collection
+            .ReplaceOneAsync(x => x.Id == restaurantSchema.Id, restaurantSchema, cancellationToken: cancellationToken);
+
+        return result.ModifiedCount > 0;
     }
 
     public async Task<bool> UpdateCountryAndNameAsync(string id, Country? country, string name, CancellationToken cancellationToken)
     {
-        try
-        {
-            if (country is not null)
-            {
-                var update = Builders<RestaurantSchema>.Update.Set(x => x.Country, country);
-                var resultCountry = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
-            }
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                var update = Builders<RestaurantSchema>.Update.Set(x => x.Name, name);
-                var resultName = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
-            }
-
-            return true;
-        }
-        catch (Exception e)
-        {
+        if (IsNotObjectId(id))
             return false;
+
+        if (country is not null)
+        {
+            var update = Builders<RestaurantSchema>.Update.Set(x => x.Country, country);
+            var resultCountry = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
         }
+
+        if (!string.IsNullOrEmpty(name))
+        {
+            var update = Builders<RestaurantSchema>.Update.Set(x => x.Name, name);
+            var resultName = await Collection.UpdateOneAsync(x => x.Id == id, update, cancellationToken: cancellationToken);
+        }
+
+        return true;
     }
 
     public async Task AddReviewAsync(Review review, CancellationToken cancellationToken)
@@ -132,6 +116,9 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
 
     public async Task<PagedResult<Review>> GetReviewsAsync(string id, IPagedQuery query, CancellationToken cancellationToken)
     {
+        if (IsNotObjectId(id))
+            return PagedResult<Review>.Empty();
+
         var resultCount = await _reviewCollection.CountDocumentsAsync(a => a.RestaurantId == id, cancellationToken: cancellationToken);
         if (resultCount == 0) return PagedResult<Review>.Empty();
 
@@ -205,17 +192,13 @@ public class RestaurantRepository : MongoRepositoryBase<RestaurantSchema>, IRest
 
     public async Task<bool> DeleteAsync(string id, CancellationToken cancellationToken)
     {
-        try
-        {
-            var reviewResult = await _reviewCollection.DeleteManyAsync(x => x.RestaurantId == id, cancellationToken);
-            var restaurantResult = await Collection.DeleteOneAsync(x => x.Id == id, cancellationToken);
+        if (IsNotObjectId(id))
+            return false;
 
-            return (restaurantResult.DeletedCount > 0 && reviewResult.DeletedCount > 0);
-        }
-        catch (Exception e)
-        {
-        }
-        return default;
+        var reviewResult = await _reviewCollection.DeleteManyAsync(x => x.RestaurantId == id, cancellationToken);
+        var restaurantResult = await Collection.DeleteOneAsync(x => x.Id == id, cancellationToken);
+
+        return (restaurantResult.DeletedCount > 0 && reviewResult.DeletedCount > 0);
     }
 
     public async Task<IEnumerable<Restaurant>> SearchWithIndex(string search, CancellationToken cancellationToken)
