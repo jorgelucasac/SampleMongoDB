@@ -1,11 +1,26 @@
 version: "3.6"
 
 services:
-   mongo-db:
-    image: 'mongo'
-    ports:
-        - '27017:27017'
-    container_name:  mongo-db
-    environment:
-        MONGO_INITDB_ROOT_USERNAME: 'admin'
-        MONGO_INITDB_ROOT_PASSWORD: 'abc123!'
+    mongo-db:
+        image: 'mongo'
+        ports:
+            - '27017:27017'
+        container_name: mongo-db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: 'admin'
+            MONGO_INITDB_ROOT_PASSWORD: 'abc123!'
+
+    web-api-restaurants-mongodb:
+        image: web-api-restaurants-mongodb:latest
+        container_name: web-api-restaurants-mongodb
+        build:
+            context: ../
+            dockerfile: ./src/Estudos.MongoDb.Api/Dockerfile
+        ports:
+            - "5001:5001"
+        restart: always
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Production
+            - ASPNETCORE_URLS=http://*:5001
+        depends_on:
+            - mongo-db

@@ -6,7 +6,9 @@ namespace Estudos.MongoDb.Api.Extensions.Middlewares;
 public class ErrorHandlerMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger _logger;
+
+    private readonly ILogger<ErrorHandlerMiddleware> _logger;
+
     private readonly IWebHostEnvironment _environment;
 
     public ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger, IWebHostEnvironment environment)
@@ -30,6 +32,8 @@ public class ErrorHandlerMiddleware
 
     private async Task ResponseErrorAsync(HttpContext context, Exception exception)
     {
+        _logger.LogError(exception, $"error in [{nameof(ErrorHandlerMiddleware)}]");
+
         var response = context.Response;
         response.ContentType = MediaTypeNames.Application.Json;
         response.StatusCode = StatusCodes.Status500InternalServerError;
