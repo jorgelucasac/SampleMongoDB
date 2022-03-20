@@ -3,6 +3,7 @@
 <p align="center">
  <a href="#-sobre-o-projeto">Sobre</a> •
  <a href="#%EF%B8%8F-funcionalidades">Funcionalidades</a> •
+ <a href="##-swagger-da-apii">Swagger da api</a> •
  <a href="#-como-executar-o-projeto">Como executar</a> • 
  <a href="#-tecnologias">Tecnologias</a> • 
  <a href="#-recursos-utilizados">Recursos utilizados</a> • 
@@ -28,6 +29,9 @@ api criada para servir de base de estudos sobre mongodb e mongodb driver
   - [x] listar reviews de um restaurants
   - [x] listar os restaurants mais bem avaliados
 
+
+## 🕮 Swagger da api
+![swagger](img/swagger-api.png)
 
 
 ## 🚀 Como executar o projeto
@@ -75,6 +79,6 @@ As seguintes ferramentes foram usadas na construção do projeto:
 - [Acesso ao banco de dados via Repositórios](https://www.martinfowler.com/eaaCatalog/repository.html)
 - [Mapeamento de entidades com Automapper](https://automapper.org/)
 - [Validação de utilizando fluent validation](https://fluentvalidation.net/)
-- Tratamento de erros
+- [Tratamento de erros](https://docs.microsoft.com/pt-br/aspnet/core/fundamentals/error-handling?view=aspnetcore-6.0)
 - [Documentação com o Swagger](https://swagger.io/)
 - [Serilog](https://serilog.net/)
